@@ -20,10 +20,9 @@ The example expects the following parameters:
 
 ## Topology
 
-This template deploys a configurable number of cluster nodes of a configurable size.  The cluster nodes are internal and only accessible on the internal virtual network.  The cluster can be accessed either through a Ubuntu VM accessible through SSH (port 22), or a Windows VM through RDP, each having a separate public IP for test purposes only. The assumption for the deployment is, the cluster is going to be provisioned as the back end of a service, and never be exposed to internet directly.
+This template deploys a configurable number of cluster nodes of a configurable size.  The cluster nodes are internal and only accessible on the virtual network.  The cluster can be accessed through an Ubuntu VM ("jumpbox") accessible via SSH (port 22) on a public IP, for test purposes only. The assumption for the deployment is, the cluster is going to be provisioned as the back end of a service, and never be exposed to internet directly.
 
-The cluster is deployed to one single availability set to ensure the distribution of VMs accross different update domains (UD) and fault domains (FD). Although Couchbase Server replicates your data across multiple instances, the placement of the replicas is important to align across FDs. It is important to make sure the primary data partition and the replicas are not under the same FD; otherwise, in the case of a failure, it could result in possible data unavailability. So, even though it is possible to specify (thus indirectly influence the distribution of VMs accross UD and FD) the number of FDs and UDs with "PlatformFaultDomainCount" and "PlatformUpdateDomainCount" properties of the availability set, we have chosen not to specify those and let that to the discretion of the administrator.
+The cluster is deployed to one single availability set to ensure the distribution of VMs accross different update domains (UD) and fault domains (FD).
 
 ## Known Issues and Limitations
 
-- http://10.0.0.10:8091 needs to be added to IE "Trusted Sites" list to open the admin tool on the Windows VM deployed in test configuration

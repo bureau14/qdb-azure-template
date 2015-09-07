@@ -16,7 +16,7 @@
         },
         "storageAccountNamePrefix": {
             "type": "string",
-            "defaultValue": "qdbdeploy",
+            //"defaultValue": "qdbdeploy",
             "metadata": {
                 "description": "Storage account name"
             }

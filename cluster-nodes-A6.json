@@ -184,7 +184,7 @@
     }
   }, {
     "type": "Microsoft.Compute/virtualMachines/extensions",
-    "name": "[concat(parameters('machineSettings').machineNamePrefix, parameters('nodeId'), '/installcouchbase')]",
+    "name": "[concat(parameters('machineSettings').machineNamePrefix, parameters('nodeId'), '/installquasardb')]",
     "apiVersion": "2015-05-01-preview",
     "location": "[parameters('commonSettings').region]",
     "dependsOn": [

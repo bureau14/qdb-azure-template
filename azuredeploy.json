@@ -76,7 +76,7 @@
         },
         "qdbPackage": {
             "type": "string",
-            "defaultValue": "server/qdb-server_2.0.0-1.deb",
+            "defaultValue": "2.0/beta4/server/qdb-server_2.0.0-1.deb",
             "metadata": {
                 "description": "QuasarDB package to install"
             }

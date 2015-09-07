@@ -27,5 +27,5 @@
 touch /mnt/helloworld
 
 while getopts d:n:i:a:p:l optname; do
-	"option $optname set with value ${OPTARG}" >> /mnt/quasardb.log 
+	echo "option $optname set with value ${OPTARG}" >> /mnt/quasardb.log 
 done

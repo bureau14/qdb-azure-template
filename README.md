@@ -1,8 +1,22 @@
 # Install a QuasarDB cluster on Ubuntu Virtual Machines using Custom Script Linux Extension
 
-This template deploys a QuasarDB cluster on Ubuntu virtual machines. This template also provisions a storage account, virtual network, availability sets, public IP addresses and network interfaces required by the installation.
+This template deploys a QuasarDB cluster on Ubuntu virtual machines. 
 
-The example expects the following parameters:
+This template provisions the QuasarDB cluster as follows:
+
+* an Ubuntu virtual machine for each node (3 to 5, depending on the selected size)
+* a storage account (5 for the "Large" size)
+* a virtual network
+* an availability set
+* a network interface for each node.
+
+Optionally, it can also provision a "jumpbox", with the following resources: 
+
+* an Ubuntu virtual machine
+* a public IP addresses
+* a dedicated storage account
+
+The template supports the following parameters:
 
 | Name   | Description    |
 |:--- |:---|
@@ -14,15 +28,18 @@ The example expects the following parameters:
 | clusterName | The name of the new cluster that is provisioned with the deployment |
 | tshirtSize | Higher level definition of a cluster size. It can take Small, Medium and Large values. This value causes cluster sizes with following characteristics. Small: 3xStandard_A2, Medium: 4xStandard_A6, Large: 5xStandard_D14  |
 | vmNamePrefix | The prefix for the names of the VMs that will be provisioned |
-| qdbPackageDownloadBase | The URL base the QuasarDB package is downloaded from |
-| qdbPackage | The QuasarDB package name |
-| jumpbox | Deploys two VMs, one Ubuntu, one Windows to access the cluster from the Internet |
+| jumpbox | Deploys an additional Ubuntu VM to access the cluster from the Internet |
 
 ## Topology
 
-This template deploys a configurable number of cluster nodes of a configurable size.  The cluster nodes are internal and only accessible on the virtual network.  The cluster can be accessed through an Ubuntu VM ("jumpbox") accessible via SSH (port 22) on a public IP, for test purposes only. The assumption for the deployment is, the cluster is going to be provisioned as the back end of a service, and never be exposed to internet directly.
+This template deploys a configurable number of cluster nodes of a configurable size. 
+The cluster nodes are internal and only accessible on the virtual network. 
+The assumption for the deployment is, the cluster is going to be provisioned as the back end of a service, and never be exposed to internet directly. 
 
-The cluster is deployed to one single availability set to ensure the distribution of VMs accross different update domains (UD) and fault domains (FD).
+The cluster can be accessed through an Ubuntu VM ("jumpbox") accessible via SSH (port 22) on a public IP, for test purposes only.
+The jumbox has a web monitoring console on port 8080.
+
+The cluster is deployed to one single availability set to ensure the distribution of VMs accros different update domains (UD) and fault domains (FD).
 
 ## Known Issues and Limitations
 

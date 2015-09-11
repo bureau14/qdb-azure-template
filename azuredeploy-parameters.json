@@ -1,23 +1,23 @@
 {
-    "adminUsername": {
-        "value": "azureuser"
-    },
-    "adminPassword": {
-        "value": "P@ssword1"
-    },
-    "tshirtSize": {
-        "value": "Small"
-    },
-    "storageAccountNamePrefix": {
-        "value": "qdbtest0709001"
-    },
-    "region": {
-        "value": "East Asia"
-    },
-    "clusterName": {
-        "value": "quasardb0709"
-    },
-    "jumpbox": {
-        "value": "enabled"
-    }
+  "adminUsername": {
+    "value": "azureuser"
+  },
+  "adminPassword": {
+    "value": "P@ssword1"
+  },
+  "tshirtSize": {
+    "value": "Small"
+  },
+  "storageAccountNamePrefix": {
+    "value": "qdbtest0709001"
+  },
+  "region": {
+    "value": "East Asia"
+  },
+  "clusterName": {
+    "value": "quasardb0709"
+  },
+  "jumpbox": {
+    "value": "enabled"
+  }
 }

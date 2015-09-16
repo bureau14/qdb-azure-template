@@ -1,0 +1,137 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json# ",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "availabilitySet": {
+      "type": "string"
+    },
+    "quasardbVersion": {
+      "type": "string"
+    },
+    "ipAddress": {
+      "type": "string"
+    },
+    "peerAddress": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "region": {
+      "type": "string"
+    },
+    "subnetName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "virtualNetworkName": {
+      "type": "string"
+    },
+    "vmImage": {
+      "type": "object"
+    },
+    "vmPassword": {
+      "type": "string"
+    },
+    "vmSize": {
+      "type": "string"
+    },
+    "vmUser": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "vmName": "[concat(deployment().name,'-vm')]",
+    "nicName": "[concat(deployment().name,'-nic')]",
+    "vmStorageAccountContainerName": "vhd",
+    "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/', parameters('subnetName'))]",
+    "filesForVersion": {
+      "nightly": [
+        "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/node-setup.sh",
+        "https://download.quasardb.net/quasardb/nightly/server/qdb-server_2.0.0master-1.deb"                
+      ]
+    },
+    "filesToDownload": "[variables('filesForVersion')[parameters('quasardbVersion')]]",
+    "commandToExecute": "[concat('bash node-setup.sh ', parameters('ipAddress'), ' ',parameters('peerAddress'))]"
+   },
+  "resources": [
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('nicName')]",
+      "location": "[parameters('region')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('ipAddress')]",
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('vmName')]",
+      "location": "[parameters('region')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySet'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+          "computername": "[deployment().name]",
+          "adminUsername": "[parameters('vmUser')]",
+          "adminPassword": "[parameters('vmPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": "[parameters('vmImage')]",
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/', deployment().name,'-os-disk.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmName'), '/setup')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[parameters('region')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.2",
+        "settings": {
+          "fileUris": "[variables('filesToDownload')]",
+          "commandToExecute": "[variables('commandToExecute')]"
+        }
+      }
+    }
+  ]
+}

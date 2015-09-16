@@ -1,0 +1,29 @@
+                                            _ _
+                                           | | |
+         __ _ _   _  __ _ ___  __ _ _ __ __| | |_
+        / _` | | | |/ _` / __|/ _` | '__/ _` | '_ \
+       | (_| | |_| | (_| \__ \ (_| | | | (_| | |_) |
+        \__, |\__,_|\__,_|___/\__,_|_|  \__,_|_.__/
+           | |
+           |_|
+
+Welcome to the quasardb Azure jumpbox!
+
+This machine is connected to the quasardb cluster.
+
+You can try the quasardb shell:
+
+    qdbsh qdb://10.0.0.10:2836
+
+You can experiment the quasardb Python API:
+
+    python
+    > import qdb
+    > cluster = qdb.Cluster('qdb://10.0.0.10:2836')
+
+Or the PHP API:
+
+    php -a
+    > $cluster = new QdbCluster('qdb://10.0.0.10:2836');
+
+Enjoy!

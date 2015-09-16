@@ -1,4 +1,8 @@
 ﻿$ErrorActionPreference = "Stop"
-Set-PSDebug -Trace 1
+#Add-AzureAccount
+
 Select-AzureSubscription -SubscriptionName "MSDN"
+Switch-AzureMode -Name AzureResourceManager
 Remove-AzureResourceGroup qdbtestcluster -Force -Verbose
+
+[Console]::Beep()

@@ -1,23 +1,14 @@
 {
   "adminUsername": {
-    "value": "azureuser"
+    "value": "qdbuser"
   },
   "adminPassword": {
-    "value": "P@ssword1"
+    "value": "qu4s4rD3"
   },
-  "tshirtSize": {
-    "value": "Small"
-  },
-  "storageAccountNamePrefix": {
-    "value": "qdbtest0709001"
+  "storageAccountName": {
+    "value": "qdbstorage"
   },
   "region": {
     "value": "East Asia"
-  },
-  "clusterName": {
-    "value": "quasardb0709"
-  },
-  "jumpbox": {
-    "value": "enabled"
   }
 }

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "quasardbVersion": {
+      "type": "string"
+    },
+    "ipAddress": {
+      "type": "string"
+    },
+    "peerAddress": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "subnetName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "virtualNetworkName": {
+      "type": "string"
+    },
+    "vmImage": {
+      "type": "object"
+    },
+    "vmPassword": {
+      "type": "string"
+    },
+    "vmSize": {
+      "type": "string"
+    },
+    "vmUser": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "filesForVersion": {
+      "nightly": [
+        "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/jumpbox-setup.sh",
+        "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/jumpbox-motd.txt",
+        "https://download.quasardb.net/quasardb/nightly/server/qdb-server_2.0.0master-1.deb",
+        "https://download.quasardb.net/quasardb/nightly/utils/qdb-utils_2.0.0master-1.deb",
+        "https://download.quasardb.net/quasardb/nightly/api/c/qdb-api_2.0.0master-1.deb",
+        "https://download.quasardb.net/quasardb/nightly/api/python/qdb_python_api-2.0.0b5beta-py2.7-linux-x86_64.egg",
+        "https://download.quasardb.net/quasardb/nightly/api/php/quasardb-2.0.0.tgz"
+      ]
+    },
+    "filesToDownload": "[variables('filesForVersion')[parameters('quasardbVersion')]]",
+    "vmStorageAccountContainerName": "vhd",
+    "vmName": "[concat(deployment().name,'-vm')]",
+    "nicName": "[concat(deployment().name,'-nic')]",
+    "publicIpName": "[concat(deployment().name,'-ip')]",
+    "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName')),'/subnets/',parameters('subnetName'))]",
+    "commandToExecute": "[concat('bash jumpbox-setup.sh ',parameters('ipAddress'),' ',parameters('peerAddress'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('publicIpName')]",
+      "location": "[parameters('region')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "apiVersion": "2014-12-01-preview",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('nicName')]",
+      "location": "[parameters('region')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIpName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('ipAddress')]",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIpName'))]"
+              },
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('vmName')]",
+      "location": "[parameters('region')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+          "computername": "[deployment().name]",
+          "adminUsername": "[parameters('vmUser')]",
+          "adminPassword": "[parameters('vmPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": "[parameters('vmImage')]",
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',deployment().name,'-os-disk.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmName'), '/setup')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[parameters('region')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.2",
+        "settings": {
+          "fileUris": "[variables('filesToDownload')]",
+          "commandToExecute": "[variables('commandToExecute')]"
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}

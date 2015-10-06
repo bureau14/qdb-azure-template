@@ -2,16 +2,13 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "quasardbVersion": {
-      "type": "string"
-    },
     "ipAddress": {
       "type": "string"
     },
     "peerAddress": {
       "type": "string"
     },
-    "region": {
+    "quasardbVersion": {
       "type": "string"
     },
     "subnetName": {
@@ -19,6 +16,10 @@
     },
     "storageAccountName": {
       "type": "string"
+    },
+    "templateBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/"
     },
     "virtualNetworkName": {
       "type": "string"
@@ -39,8 +40,8 @@
   "variables": {
     "filesForVersion": {
       "nightly": [
-        "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/jumpbox-setup.sh",
-        "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/jumpbox-motd.txt",
+        "[concat(parameters('templateBaseUrl'), 'jumpbox-setup.sh')]",
+        "[concat(parameters('templateBaseUrl'), 'jumpbox-motd.txt')]",
         "https://download.quasardb.net/quasardb/nightly/server/qdb-server_2.0.0master-1.deb",
         "https://download.quasardb.net/quasardb/nightly/utils/qdb-utils_2.0.0master-1.deb",
         "https://download.quasardb.net/quasardb/nightly/api/c/qdb-api_2.0.0master-1.deb",
@@ -52,7 +53,8 @@
     "vmStorageAccountContainerName": "vhd",
     "vmName": "[concat(deployment().name,'-vm')]",
     "nicName": "[concat(deployment().name,'-nic')]",
-    "publicIpName": "[concat(deployment().name,'-ip')]",
+    "publicIpName": "[concat(deployment().name,'-publicIp')]",
+    "region": "[resourceGroup().location]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName')),'/subnets/',parameters('subnetName'))]",
     "commandToExecute": "[concat('bash jumpbox-setup.sh ',parameters('ipAddress'),' ',parameters('peerAddress'))]"
   },
@@ -61,7 +63,7 @@
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('publicIpName')]",
-      "location": "[parameters('region')]",
+      "location": "[variables('region')]",
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
       }
@@ -70,7 +72,7 @@
       "apiVersion": "2014-12-01-preview",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
-      "location": "[parameters('region')]",
+      "location": "[variables('region')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIpName'))]"
       ],
@@ -96,7 +98,7 @@
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmName')]",
-      "location": "[parameters('region')]",
+      "location": "[variables('region')]",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
@@ -133,7 +135,7 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmName'), '/setup')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('region')]",
+      "location": "[variables('region')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
       ],

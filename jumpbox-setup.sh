@@ -7,6 +7,7 @@ PEER_ADDRESS=$2
 
 cd $(dirname $0)
 
+apt-get update
 apt-get -y install 'jq' 'python-setuptools' 'php-pear' 'php5-dev' 'libpcre3-dev'
 dpkg -i *.deb
 easy_install *.egg

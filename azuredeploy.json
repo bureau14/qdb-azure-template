@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json# ",
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "adminUsername": {
@@ -11,12 +11,11 @@
     "adminPassword": {
       "type": "securestring",
       "metadata": {
-        "description": "Admin password used when provisioning virtual machines"
+        "description": "Admin password used when provisioning virtual machines. The supplied password must be between 6-72 characters long and must satisfy at least 3 of password complexity requirements from the following: \r\n1) Contains an uppercase character\r\n2) Contains a lowercase character\r\n3) Contains a numeric digit\r\n4) Contains a special character."
       }
     },
     "storageAccountName": {
       "type": "string",
-      "defaultValue": "qdbstorage",
       "metadata": {
         "description": "Storage account name"
       }
@@ -28,36 +27,105 @@
         "description": "Prefix for all names in the deployment"
       }
     },
-    "region": {
-      "type": "string",
-      "allowedValues": [
-        "East Asia",
-        "East US",
-        "Southeast Asia",
-        "West Europe",
-        "West US"
-      ],
+    "clusterSize": {
+      "type": "int",
+      "defaultValue": 3,
       "metadata": {
-        "description": "Location where resources will be provisioned"
+        "description": "Number of nodes in the cluster"
       }
     },
-    "clusterSize": {
-        "type": "int",
-        "defaultValue": 3,
-        "metadata": {
-          "description": "Number of nodes in the cluster"
-        }
-    },
-    "vmSize": {
+    "nodeSize": {
       "type": "string",
       "defaultValue": "Standard_A2",
       "allowedValues": [
+        "Basic_A0",
+        "Basic_A1",
+        "Basic_A2",
+        "Basic_A3",
+        "Basic_A4",
+        "Standard_A0",
+        "Standard_A1",
         "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_A5",
         "Standard_A6",
-        "Standard_D14"
+        "Standard_A7",
+        "Standard_A8",
+        "Standard_A9",
+        "Standard_A10",
+        "Standard_A11",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_G1",
+        "Standard_G2",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5"
       ],
       "metadata": {
-        "description": "Size of the virtual machines"
+        "description": "Size of the virtual machines for each node"
+      }
+    },
+    "jumpboxSize": {
+      "type": "string",
+      "defaultValue": "Standard_A4",
+      "allowedValues": [
+        "Basic_A0",
+        "Basic_A1",
+        "Basic_A2",
+        "Basic_A3",
+        "Basic_A4",
+        "Standard_A0",
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_A5",
+        "Standard_A6",
+        "Standard_A7",
+        "Standard_A8",
+        "Standard_A9",
+        "Standard_A10",
+        "Standard_A11",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_G1",
+        "Standard_G2",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5"
+      ],
+      "metadata": {
+        "description": "Size of the virtual machine for the jumbox"
       }
     },
     "quasardbVersion": {
@@ -71,18 +139,19 @@
       }
     }
   },
-  "variables": {  
+  "variables": {
     "availabilitySet": "[concat(parameters('namePrefix'), 'cluster')]",
     "subnetName": "quasardb",
     "nodesIpPrefix": "10.0.0.",
-    "nodeName": "[concat(parameters('namePrefix'), 'node')]",  
-    "jumpboxName": "[concat(parameters('namePrefix'), 'jumpbox')]",  
+    "nodeName": "[concat(parameters('namePrefix'), 'node')]",
+    "jumpboxName": "[concat(parameters('namePrefix'), 'jumpbox')]",
     "imageReference": {
       "publisher": "Canonical",
       "offer": "UbuntuServer",
       "sku": "14.04.3-LTS",
       "version": "latest"
     },
+    "region": "[resourceGroup().location]",
     "templateBaseUrl": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/",
     "virtualNetworkName": "[concat(parameters('namePrefix'), 'vnet')]"
   },
@@ -100,9 +169,6 @@
         "parameters": {
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
-          },
-          "region": {
-            "value": "[parameters('region')]"
           },
           "storageAccountName": {
             "value": "[parameters('storageAccountName')]"
@@ -132,21 +198,21 @@
         "parameters": {
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
-          },
-          "quasardbVersion": {
-            "value": "[parameters('quasardbVersion')]"
-          },
+          },          
           "ipAddress": {
             "value": "[concat(variables('nodesIpPrefix'), '10')]"
           },
-          "region": {
-            "value": "[parameters('region')]"
+          "quasardbVersion": {
+            "value": "[parameters('quasardbVersion')]"
           },
           "subnetName": {
             "value": "[variables('subnetName')]"
           },
           "storageAccountName": {
             "value": "[parameters('storageAccountName')]"
+          },
+          "templateBaseUrl": {
+            "value": "[variables('templateBaseUrl')]"
           },
           "virtualNetworkName": {
             "value": "[variables('virtualNetworkName')]"
@@ -158,7 +224,7 @@
             "value": "[parameters('adminPassword')]"
           },
           "vmSize": {
-            "value": "[parameters('vmSize')]"
+            "value": "[parameters('nodeSize')]"
           },
           "vmUser": {
             "value": "[parameters('adminUsername')]"
@@ -186,24 +252,24 @@
         "parameters": {
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
-          },
-          "quasardbVersion": {
-            "value": "[parameters('quasardbVersion')]"
-          },
+          },          
           "ipAddress": {
             "value": "[concat(variables('nodesIpPrefix'), copyindex(11))]"
           },
           "peerAddress": {
             "value": "[concat(variables('nodesIpPrefix'), 10)]"
           },
-          "region": {
-            "value": "[parameters('region')]"
+          "quasardbVersion": {
+            "value": "[parameters('quasardbVersion')]"
           },
           "subnetName": {
             "value": "[variables('subnetName')]"
           },
           "storageAccountName": {
             "value": "[parameters('storageAccountName')]"
+          },
+          "templateBaseUrl": {
+            "value": "[variables('templateBaseUrl')]"
           },
           "virtualNetworkName": {
             "value": "[variables('virtualNetworkName')]"
@@ -215,7 +281,7 @@
             "value": "[parameters('adminPassword')]"
           },
           "vmSize": {
-            "value": "[parameters('vmSize')]"
+            "value": "[parameters('nodeSize')]"
           },
           "vmUser": {
             "value": "[parameters('adminUsername')]"
@@ -236,24 +302,24 @@
           "uri": "[concat(variables('templateBaseUrl'), 'jumpbox-resources.json')]",
           "contentVersion": "1.0.0.0"
         },
-        "parameters": {
-          "quasardbVersion": {
-            "value": "[parameters('quasardbVersion')]"
-          },
+        "parameters": {          
           "ipAddress": {
             "value": "10.0.0.4"
           },
           "peerAddress": {
             "value": "10.0.0.10"
           },
-          "region": {
-            "value": "[parameters('region')]"
+          "quasardbVersion": {
+            "value": "[parameters('quasardbVersion')]"
           },
           "subnetName": {
             "value": "[variables('subnetName')]"
           },
           "storageAccountName": {
             "value": "[parameters('storageAccountName')]"
+          },
+          "templateBaseUrl": {
+            "value": "[variables('templateBaseUrl')]"
           },
           "virtualNetworkName": {
             "value": "[variables('virtualNetworkName')]"
@@ -265,11 +331,11 @@
             "value": "[parameters('adminPassword')]"
           },
           "vmSize": {
-            "value": "[parameters('vmSize')]"
+            "value": "[parameters('jumpboxSize')]"
           },
           "vmUser": {
             "value": "[parameters('adminUsername')]"
-          }        
+          }
         }
       }
     }

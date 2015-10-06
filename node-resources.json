@@ -15,14 +15,15 @@
       "type": "string",
       "defaultValue": ""
     },
-    "region": {
-      "type": "string"
-    },
     "subnetName": {
       "type": "string"
     },
     "storageAccountName": {
       "type": "string"
+    },
+    "templateBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/"
     },
     "virtualNetworkName": {
       "type": "string"
@@ -44,10 +45,11 @@
     "vmName": "[concat(deployment().name,'-vm')]",
     "nicName": "[concat(deployment().name,'-nic')]",
     "vmStorageAccountContainerName": "vhd",
+    "region": "[resourceGroup().location]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/', parameters('subnetName'))]",
     "filesForVersion": {
       "nightly": [
-        "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/node-setup.sh",
+        "[concat(parameters('templateBaseUrl'), 'node-setup.sh')]",
         "https://download.quasardb.net/quasardb/nightly/server/qdb-server_2.0.0master-1.deb"                
       ]
     },
@@ -59,7 +61,7 @@
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
-      "location": "[parameters('region')]",
+      "location": "[variables('region')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -79,7 +81,7 @@
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmName')]",
-      "location": "[parameters('region')]",
+      "location": "[variables('region')]",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
@@ -119,7 +121,7 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmName'), '/setup')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('region')]",
+      "location": "[variables('region')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
       ],

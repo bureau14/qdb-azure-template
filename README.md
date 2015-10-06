@@ -36,7 +36,6 @@ The template supports the following parameters:
 | adminUsername  | Admin username used when provisioning virtual machines  |
 | adminPassword  | Admin password used when provisioning virtual machines  |
 | storageAccountName  | Name of the storage account to be used for all resources |
-| region | Region name where the corresponding Azure artifacts will be created | |
 | namePrefix | The prefix for the names of all resources |
 
 ## Topology

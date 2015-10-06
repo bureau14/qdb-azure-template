@@ -7,8 +7,5 @@
   },
   "storageAccountName": {
     "value": "qdbstorage"
-  },
-  "region": {
-    "value": "East Asia"
   }
 }

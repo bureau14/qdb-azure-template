@@ -8,6 +8,7 @@ DEPOT_ROOT='/mnt/db'
 
 cd $(dirname $0)
 
+apt-get update
 apt-get -y install jq
 dpkg -i *.deb
 mv '/var/lib/qdb/db' "$DEPOT_ROOT"            

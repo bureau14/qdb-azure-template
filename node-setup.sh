@@ -20,7 +20,7 @@ function configure-qdbd {
 
 configure-qdbd 'local.network.listen_on' "\"$MY_ADDRESS:2836\""
 configure-qdbd 'global.depot.root' "\"$DEPOT_ROOT\""
-configure-qdbd 'global.limiter.max_in_entries_count' '99999'
+configure-qdbd 'global.limiter.max_in_entries_count' '999999'
 
 if [ "$PEER_ADDRESS" != "" ]; then
     configure-qdbd 'local.chord.bootstrapping_peers' "[\"$PEER_ADDRESS:2836\"]"

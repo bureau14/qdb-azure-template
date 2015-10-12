@@ -39,6 +39,15 @@
   },
   "variables": {
     "filesForVersion": {
+      "2.0.0 beta 5": [
+        "[concat(parameters('templateBaseUrl'), 'jumpbox-setup.sh')]",
+        "[concat(parameters('templateBaseUrl'), 'jumpbox-motd.txt')]",
+        "https://download.quasardb.net/quasardb/2.0/beta5/server/qdb-server_2.0.0-1.deb",
+        "https://download.quasardb.net/quasardb/2.0/beta5/utils/qdb-utils_2.0.0-1.deb",
+        "https://download.quasardb.net/quasardb/2.0/beta5/api/c/qdb-api_2.0.0-1.deb",
+        "https://download.quasardb.net/quasardb/2.0/beta5/api/python/qdb_python_api-2.0.0b5beta-py2.7-linux-x86_64.egg",
+        "https://download.quasardb.net/quasardb/2.0/beta5/api/php/quasardb-2.0.0.tgz"
+      ],
       "nightly": [
         "[concat(parameters('templateBaseUrl'), 'jumpbox-setup.sh')]",
         "[concat(parameters('templateBaseUrl'), 'jumpbox-motd.txt')]",

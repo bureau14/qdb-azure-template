@@ -28,15 +28,15 @@ However, since data is replicated between the nodes (3 times by default), the da
 
 The template supports the following parameters:
 
-| Name   | Description    |
-|:--- |:---|
-| clusterSize | Number of nodes (ie number of VM) in the cluster |
-| vmSize | Size of Virtual Machines (nodes and jumbox) |
-| quasardbVersion | Version of QuasarDB to install |
-| adminUsername  | Admin username used when provisioning virtual machines  |
-| adminPassword  | Admin password used when provisioning virtual machines  |
-| storageAccountName  | Name of the storage account to be used for all resources |
-| namePrefix | The prefix for the names of all resources |
+| Name               | Description                                              |
+|:------------------ |:-------------------------------------------------------- |
+| nodeCount          | Number of nodes (ie number of VM) in the cluster         |
+| nodeSize           | Size of Virtual Machines (nodes and jumbox)              |
+| quasardbVersion    | Version of QuasarDB to install                           |
+| adminUsername      | Admin username used when provisioning virtual machines   |
+| adminPassword      | Admin password used when provisioning virtual machines   |
+| storageAccountName | Name of the storage account to be used for all resources |
+| namePrefix         | The prefix for the names of all resources                |
 
 ## Topology
 

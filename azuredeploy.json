@@ -27,7 +27,7 @@
         "description": "Prefix for all names in the deployment"
       }
     },
-    "clusterSize": {
+    "nodeCount": {
       "type": "int",
       "defaultValue": 3,
       "metadata": {
@@ -242,7 +242,7 @@
       ],
       "copy": {
         "name": "clusterNodesLoop",
-        "count": "[sub(parameters('clusterSize'),1)]"
+        "count": "[sub(parameters('nodeCount'),1)]"
       },
       "properties": {
         "mode": "Incremental",

@@ -15,6 +15,14 @@
       "type": "string",
       "defaultValue": ""
     },
+    "nodeIndex": {
+      "type": "int",
+      "defaultValue": 0
+    },
+    "nodeCount": {
+      "type": "int",
+      "defaultValue": 1
+    },
     "subnetName": {
       "type": "string"
     },
@@ -62,7 +70,7 @@
       ]
     },
     "filesToDownload": "[variables('filesForVersion')[parameters('quasardbVersion')]]",
-    "commandToExecute": "[concat('bash node-setup.sh ', parameters('ipAddress'), ' ',parameters('peerAddress'))]"
+    "commandToExecute": "[concat('bash node-setup.sh -a',parameters('ipAddress'),' -p',parameters('peerAddress'),' -i',parameters('nodeIndex'),' -n',parameters('nodeCount'))]"
   },
   "resources": [
     {

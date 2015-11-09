@@ -200,9 +200,18 @@
         "parameters": {
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
-          },          
+          },
           "ipAddress": {
             "value": "[concat(variables('nodesIpPrefix'), '10')]"
+          },
+          "nodeCount": {
+            "value": "[parameters('nodeCount')]"
+          },
+          "nodeIndex": {
+            "value": 0
+          },
+          "peerAddress": {
+            "value": "[concat(variables('nodesIpPrefix'), 10)]"
           },
           "quasardbVersion": {
             "value": "[parameters('quasardbVersion')]"
@@ -254,9 +263,15 @@
         "parameters": {
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
-          },          
+          },
           "ipAddress": {
             "value": "[concat(variables('nodesIpPrefix'), copyindex(11))]"
+          },
+          "nodeCount": {
+            "value": "[parameters('nodeCount')]"
+          },
+          "nodeIndex": {
+            "value": "[copyindex(1)]"
           },
           "peerAddress": {
             "value": "[concat(variables('nodesIpPrefix'), 10)]"
@@ -304,7 +319,7 @@
           "uri": "[concat(variables('templateBaseUrl'), 'jumpbox-resources.json')]",
           "contentVersion": "1.0.0.0"
         },
-        "parameters": {          
+        "parameters": {
           "ipAddress": {
             "value": "10.0.0.4"
           },

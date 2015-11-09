@@ -130,8 +130,9 @@
     },
     "quasardbVersion": {
       "type": "string",
-      "defaultValue": "2.0.0 beta 5",
+      "defaultValue": "2.0.0 beta 6",
       "allowedValues": [
+        "2.0.0 beta 6",
         "2.0.0 beta 5",
         "nightly"
       ],

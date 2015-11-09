@@ -48,18 +48,22 @@
     "region": "[resourceGroup().location]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/', parameters('subnetName'))]",
     "filesForVersion": {
+      "2.0.0 beta 6": [
+        "[concat(parameters('templateBaseUrl'), 'node-setup.sh')]",
+        "https://download.quasardb.net/quasardb/2.0/beta6/server/qdb-server_2.0.0-1.deb"
+      ],
       "2.0.0 beta 5": [
         "[concat(parameters('templateBaseUrl'), 'node-setup.sh')]",
-        "https://download.quasardb.net/quasardb/2.0/beta5/server/qdb-server_2.0.0-1.deb"                
+        "https://download.quasardb.net/quasardb/2.0/beta5/server/qdb-server_2.0.0-1.deb"
       ],
       "nightly": [
         "[concat(parameters('templateBaseUrl'), 'node-setup.sh')]",
-        "https://download.quasardb.net/quasardb/nightly/server/qdb-server_2.0.0master-1.deb"                
+        "https://download.quasardb.net/quasardb/nightly/server/qdb-server_2.0.0master-1.deb"
       ]
     },
     "filesToDownload": "[variables('filesForVersion')[parameters('quasardbVersion')]]",
     "commandToExecute": "[concat('bash node-setup.sh ', parameters('ipAddress'), ' ',parameters('peerAddress'))]"
-   },
+  },
   "resources": [
     {
       "apiVersion": "2015-05-01-preview",

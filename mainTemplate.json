@@ -89,7 +89,7 @@
       "version": "latest"
     },
     "region": "[resourceGroup().location]",
-    "templateBaseUrl": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/",
+    "templateBaseUrl": "https://raw.githubusercontent.com/tomconte/quasardb-arm-template/master/",
     "virtualNetworkName": "[concat(parameters('namePrefix'), 'vnet')]",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "linuxConfiguration_sshPublicKey": {

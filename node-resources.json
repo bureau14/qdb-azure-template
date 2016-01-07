@@ -31,7 +31,7 @@
     },
     "templateBaseUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/"
+      "defaultValue": "https://raw.githubusercontent.com/tomconte/quasardb-arm-template/master/"
     },
     "virtualNetworkName": {
       "type": "string"

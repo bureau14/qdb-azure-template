@@ -188,25 +188,30 @@
             }
           },
           {
-            "name": "adminPassword",
-            "type": "Microsoft.Common.PasswordBox",
+            "name": "adminCredentials",
+            "type": "Microsoft.Compute.CredentialsCombo",
             "label": {
+              "authenticationType": "Authentication type",
               "password": "Password",
-              "confirmPassword": "Confirm password"
+              "confirmPassword": "Confirm password",
+              "sshPublicKey": "SSH public key"
             },
-            "toolTip": "Admin password for the virtual machines.",
             "constraints": {
-              "required": true,
-              "regex": "^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\\d\\W])|(?=.*\\W)(?=.*\\d))|(?=.*\\W)(?=.*[A-Z])(?=.*\\d)).{6,72}$",
-              "validationMessage": "The password must be between 6 and 72 characters long, and contain characters from at least 3 of the following groups: uppercase characters, lowercase characters, numbers, and special characters."
-            }
+              "required": true
+            },
+            "options": {
+              "hideConfirmation": false
+            },
+            "osPlatform": "Linux"
           }
         ]
       }
     ],
     "outputs": {
       "adminUsername": "[steps('credentials').adminUsername]",
-      "adminPassword": "[steps('credentials').adminPassword]",
+      "authenticationType": "[steps('credentials').adminCredentials.authenticationType]",
+      "adminPassword": "[steps('credentials').adminCredentials.password]",
+      "sshPublicKey": "[steps('credentials').adminCredentials.sshPublicKey]",
       "storageAccountName": "[steps('cluster').storageAccount.name]",
       "nodeCount": "[steps('cluster').nodeCount]",
       "nodeSize": "[steps('cluster').nodeSize]",

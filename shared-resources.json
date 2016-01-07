@@ -2,6 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#1",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "location": {
+      "type": "string"
+    },
     "availabilitySet": {
       "type": "string"
     },
@@ -17,7 +20,7 @@
   },
   "variables": {
     "addressPrefix": "10.0.0.0/16",
-    "region": "[resourceGroup().location]",
+    "region": "[variables('location')]",
     "subnetPrefix": "10.0.0.0/24"
   },
   "resources": [

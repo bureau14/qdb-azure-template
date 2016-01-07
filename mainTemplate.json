@@ -316,11 +316,11 @@
     }
   ],
   "outputs": {
-    "publicIPAddress": {
+    "publicAddress": {
       "type": "string",
-      "value": "[reference(variables('jumpboxName')).outputs.publicIPAddress.value]",
+      "value": "[concat(reference(variables('jumpboxName')).outputs.domainNameLabel.value,'.',variable('region'),'.cloudapp.azure.com')]",
       "metadata": {
-        "description": "SSH to this public IP address to access the jump box."
+        "description": "SSH to this public address to access the jump box."
       }
     }
   }

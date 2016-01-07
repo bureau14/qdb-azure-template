@@ -86,7 +86,10 @@
       "name": "[variables('publicIpName')]",
       "location": "[variables('region')]",
       "properties": {
-        "publicIPAllocationMethod": "Dynamic"
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[concat('qdb-', uniqueString(resourceGroup().id))]"
+        } 
       }
     },
     {
@@ -173,9 +176,9 @@
     }
   ],
   "outputs": {
-    "publicIPAddress": {
+    "domainNameLabel": {
       "type": "string",
-      "value": "[reference(variables('publicIpName'))]"
+      "value": "[reference(variables('publicIpName')).dnsSettings.domainNameLabel]"
     }
   }
 }

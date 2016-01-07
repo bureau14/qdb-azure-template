@@ -30,6 +30,9 @@
     "vmPassword": {
       "type": "string"
     },
+    "vmLinuxConfig": {
+      "type": "object"
+    },
     "vmSize": {
       "type": "string"
     },
@@ -127,7 +130,8 @@
         "osProfile": {
           "computerName": "[deployment().name]",
           "adminUsername": "[parameters('vmUser')]",
-          "adminPassword": "[parameters('vmPassword')]"
+          "adminPassword": "[parameters('vmPassword')]",
+          "linuxConfiguration": "[parameters('vmLinuxConfig')]"
         },
         "storageProfile": {
           "osDisk": {

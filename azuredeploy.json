@@ -2,16 +2,31 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+      "authenticationType": {
+      "type": "string",
+      "allowedValues": [
+        "password",
+        "sshPublicKey"
+      ]
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
-        "description": "Admin username used when provisioning virtual machines"
+        "description": "User name for the Virtual Machine."
       }
     },
     "adminPassword": {
       "type": "securestring",
+      "defaultValue": "", 
       "metadata": {
-        "description": "Admin password used when provisioning virtual machines. The supplied password must be between 6-72 characters long and must satisfy at least 3 of password complexity requirements from the following: \r\n1) Contains an uppercase character\r\n2) Contains a lowercase character\r\n3) Contains a numeric digit\r\n4) Contains a special character."
+        "description": "Password for the Virtual Machine. Not used if authenticationType of sshPublicKey."
+      }
+    },
+    "sshPublicKey": {
+      "type": "string",
+      "defaultValue": "", 
+      "metadata": {
+        "description": "SSH RSA public key file as a string. Not used if authenticationType of password."
       }
     },
     "storageAccountName": {
@@ -75,7 +90,21 @@
     },
     "region": "[resourceGroup().location]",
     "templateBaseUrl": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/",
-    "virtualNetworkName": "[concat(parameters('namePrefix'), 'vnet')]"
+    "virtualNetworkName": "[concat(parameters('namePrefix'), 'vnet')]",
+    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
+    "linuxConfiguration_sshPublicKey": {
+      "disablePasswordAuthentication": "true",
+      "ssh": {
+        "publicKeys": [
+          {
+            "path": "[variables('sshKeyPath')]",
+            "keyData": "[parameters('sshPublicKey')]"
+          }
+        ]
+      }
+    },
+    "linuxConfiguration_password": { },
+    "linuxConfiguration": "[variables(concat('linuxConfiguration_',parameters('authenticationType')))]"
   },
   "resources": [
     {
@@ -154,6 +183,9 @@
           "vmPassword": {
             "value": "[parameters('adminPassword')]"
           },
+          "vmLinuxConfig": {
+            "value": "[variables('linuxConfiguration')]"
+          },
           "vmSize": {
             "value": "[parameters('nodeSize')]"
           },
@@ -217,6 +249,9 @@
           "vmPassword": {
             "value": "[parameters('adminPassword')]"
           },
+          "vmLinuxConfig": {
+            "value": "[variables('linuxConfiguration')]"
+          },
           "vmSize": {
             "value": "[parameters('nodeSize')]"
           },
@@ -266,6 +301,9 @@
           },
           "vmPassword": {
             "value": "[parameters('adminPassword')]"
+          },
+          "vmLinuxConfig": {
+            "value": "[variables('linuxConfiguration')]"
           },
           "vmSize": {
             "value": "[parameters('jumpboxSize')]"

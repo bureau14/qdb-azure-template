@@ -174,5 +174,13 @@
       }
     }
   ],
-  "outputs": {}
+  "outputs": {
+    "publicIPAddress": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('publicIpName'))).ipAddress]",
+      "metadata": {
+        "description": "SSH to this public IP address to access the jump box."
+      }
+    }
+  }
 }

@@ -74,7 +74,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
       "location": "[variables('region')]",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmName')]",
       "location": "[variables('region')]",
@@ -109,16 +109,18 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computername": "[deployment().name]",
+          "computerName": "[deployment().name]",
           "adminUsername": "[parameters('vmUser')]",
           "adminPassword": "[parameters('vmPassword')]"
         },
         "storageProfile": {
-          "imageReference": "[parameters('vmImage')]",
           "osDisk": {
             "name": "osdisk",
             "vhd": {
               "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/', deployment().name,'-os-disk.vhd')]"
+            },
+            "image": {
+              "uri": "[parameters('vmImage')]" 
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -136,7 +138,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmName'), '/setup')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2015-06-15",
       "location": "[variables('region')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"

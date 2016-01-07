@@ -20,7 +20,7 @@
   },
   "variables": {
     "addressPrefix": "10.0.0.0/16",
-    "region": "[variables('location')]",
+    "region": "[parameters('location')]",
     "subnetPrefix": "10.0.0.0/24"
   },
   "resources": [

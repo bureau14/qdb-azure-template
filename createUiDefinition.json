@@ -216,7 +216,8 @@
       "nodeCount": "[steps('cluster').nodeCount]",
       "nodeSize": "[steps('cluster').nodeSize]",
       "jumpboxSize": "[steps('cluster').jumpboxSize]",
-      "quasardbVersion": "[steps('cluster').quasardbVersion]"
+      "quasardbVersion": "[steps('cluster').quasardbVersion]",
+      "location": "[location()]"
     }
   }
 }

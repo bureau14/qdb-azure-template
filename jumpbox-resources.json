@@ -2,6 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "location": {
+      "type": "string"
+    },
     "ipAddress": {
       "type": "string"
     },
@@ -75,7 +78,7 @@
     "vmName": "[concat(deployment().name,'-vm')]",
     "nicName": "[concat(deployment().name,'-nic')]",
     "publicIpName": "[concat(deployment().name,'-publicIp')]",
-    "region": "[resourceGroup().location]",
+    "region": "[parameters('location')]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName')),'/subnets/',parameters('subnetName'))]",
     "commandToExecute": "[concat('bash jumpbox-setup.sh ',parameters('ipAddress'),' ',parameters('peerAddress'))]"
   },

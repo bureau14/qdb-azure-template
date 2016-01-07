@@ -2,7 +2,13 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-      "authenticationType": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "The location where the solution will be deployed."
+      }
+    },
+    "authenticationType": {
       "type": "string",
       "allowedValues": [
         "password",
@@ -88,7 +94,7 @@
       "sku": "14.04.3-LTS",
       "version": "latest"
     },
-    "region": "[resourceGroup().location]",
+    "region": "[parameters('location')]",
     "templateBaseUrl": "https://raw.githubusercontent.com/tomconte/quasardb-arm-template/master/",
     "virtualNetworkName": "[concat(parameters('namePrefix'), 'vnet')]",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
@@ -118,6 +124,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "location": {
+            "value": "[variables('region')]" 
+          },
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
           },
@@ -147,6 +156,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "location": {
+            "value": "[variables('region')]" 
+          },
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
           },
@@ -213,6 +225,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "location": {
+            "value": "[variables('region')]" 
+          },
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
           },
@@ -275,6 +290,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "location": {
+            "value": "[variables('region')]" 
+          },
           "ipAddress": {
             "value": "10.0.0.4"
           },
@@ -318,7 +336,7 @@
   "outputs": {
     "publicAddress": {
       "type": "string",
-      "value": "[concat(reference(variables('jumpboxName')).outputs.domainNameLabel.value,'.',variable('region'),'.cloudapp.azure.com')]",
+      "value": "[concat(reference(variables('jumpboxName')).outputs.domainNameLabel.value,'.',variables('region'),'.cloudapp.azure.com')]",
       "metadata": {
         "description": "SSH to this public address to access the jump box."
       }

@@ -147,17 +147,13 @@
             "name": "quasardbVersion",
             "type": "Microsoft.Common.DropDown",
             "label": "quasardb version",
-            "defaultValue": "2.0.0 beta 6",
+            "defaultValue": "2.0.0rc2",
             "toolTip": "The version of quasardb to install.",
             "constraints": {
               "allowedValues": [
                 {
-                  "label": "2.0.0 beta 6",
-                  "value": "2.0.0 beta 6"
-                },
-                {
-                  "label": "2.0.0 beta 5",
-                  "value": "2.0.0 beta 5"
+                  "label": "2.0.0rc2",
+                  "value": "2.0.0rc2"
                 },
                 {
                   "label": "nightly",

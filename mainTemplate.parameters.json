@@ -21,7 +21,7 @@
     "value": "Standard_A9"
   },
   "quasardbVersion": {
-    "value": "2.0.0 beta 6"
+    "value": "2.0.0rc2"
   },
   "location": {
     "value": "northeurope"

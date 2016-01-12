@@ -22,7 +22,7 @@
     },
     "templateBaseUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/tomconte/quasardb-arm-template/master/"
+      "defaultValue": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/"
     },
     "virtualNetworkName": {
       "type": "string"
@@ -45,31 +45,22 @@
   },
   "variables": {
     "filesForVersion": {
-      "2.0.0 beta 6": [
+      "2.0.0rc2": [
         "[concat(parameters('templateBaseUrl'), 'jumpbox-setup.sh')]",
         "[concat(parameters('templateBaseUrl'), 'jumpbox-motd.txt')]",
-        "https://download.quasardb.net/quasardb/2.0/beta6/server/qdb-server_2.0.0-1.deb",
-        "https://download.quasardb.net/quasardb/2.0/beta6/utils/qdb-utils_2.0.0-1.deb",
-        "https://download.quasardb.net/quasardb/2.0/beta6/api/c/qdb-api_2.0.0-1.deb",
-        "https://download.quasardb.net/quasardb/2.0/beta6/api/python/qdb_python_api-2.0.0b6beta-py2.7-linux-x86_64.egg",
-        "https://download.quasardb.net/quasardb/2.0/beta6/api/php/quasardb-2.0.0.tgz"
-      ],
-      "2.0.0 beta 5": [
-        "[concat(parameters('templateBaseUrl'), 'jumpbox-setup.sh')]",
-        "[concat(parameters('templateBaseUrl'), 'jumpbox-motd.txt')]",
-        "https://download.quasardb.net/quasardb/2.0/beta5/server/qdb-server_2.0.0-1.deb",
-        "https://download.quasardb.net/quasardb/2.0/beta5/utils/qdb-utils_2.0.0-1.deb",
-        "https://download.quasardb.net/quasardb/2.0/beta5/api/c/qdb-api_2.0.0-1.deb",
-        "https://download.quasardb.net/quasardb/2.0/beta5/api/python/qdb_python_api-2.0.0b5beta-py2.7-linux-x86_64.egg",
-        "https://download.quasardb.net/quasardb/2.0/beta5/api/php/quasardb-2.0.0.tgz"
-      ],
+        "https://download.quasardb.net/quasardb/2.0/2.0.0rc2/server/qdb-server_2.0.0-1.deb",
+        "https://download.quasardb.net/quasardb/2.0/2.0.0rc2/utils/qdb-utils_2.0.0-1.deb",
+        "https://download.quasardb.net/quasardb/2.0/2.0.0rc2/api/c/qdb-api_2.0.0-1.deb",
+        "https://download.quasardb.net/quasardb/2.0/2.0.0rc2/api/python/qdb_python_api-2.0.0b6beta-py2.7-linux-x86_64.egg",
+        "https://download.quasardb.net/quasardb/2.0/2.0.0rc2/api/php/quasardb-2.0.0.tgz"
+      ],  
       "nightly": [
         "[concat(parameters('templateBaseUrl'), 'jumpbox-setup.sh')]",
         "[concat(parameters('templateBaseUrl'), 'jumpbox-motd.txt')]",
         "https://download.quasardb.net/quasardb/nightly/server/qdb-server_2.0.0master-1.deb",
         "https://download.quasardb.net/quasardb/nightly/utils/qdb-utils_2.0.0master-1.deb",
         "https://download.quasardb.net/quasardb/nightly/api/c/qdb-api_2.0.0master-1.deb",
-        "https://download.quasardb.net/quasardb/nightly/api/python/qdb_python_api-2.0.0b5beta-py2.7-linux-x86_64.egg",
+        "https://download.quasardb.net/quasardb/nightly/api/python/qdb_python_api-2.0.0b6beta-py2.7-linux-x86_64.egg",
         "https://download.quasardb.net/quasardb/nightly/api/php/quasardb-2.0.0.tgz"
       ]
     },

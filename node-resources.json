@@ -34,7 +34,7 @@
     },
     "templateBaseUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/tomconte/quasardb-arm-template/master/"
+      "defaultValue": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/"
     },
     "virtualNetworkName": {
       "type": "string"
@@ -62,13 +62,9 @@
     "region": "[parameters('location')]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/', parameters('subnetName'))]",
     "filesForVersion": {
-      "2.0.0 beta 6": [
+      "2.0.0rc2": [
         "[concat(parameters('templateBaseUrl'), 'node-setup.sh')]",
-        "https://download.quasardb.net/quasardb/2.0/beta6/server/qdb-server_2.0.0-1.deb"
-      ],
-      "2.0.0 beta 5": [
-        "[concat(parameters('templateBaseUrl'), 'node-setup.sh')]",
-        "https://download.quasardb.net/quasardb/2.0/beta5/server/qdb-server_2.0.0-1.deb"
+        "https://download.quasardb.net/quasardb/2.0/2.0.0rc2/server/qdb-server_2.0.0-1.deb"
       ],
       "nightly": [
         "[concat(parameters('templateBaseUrl'), 'node-setup.sh')]",

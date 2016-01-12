@@ -71,10 +71,9 @@
     },
     "quasardbVersion": {
       "type": "string",
-      "defaultValue": "2.0.0 beta 6",
+      "defaultValue": "2.0.0rc2",
       "allowedValues": [
-        "2.0.0 beta 6",
-        "2.0.0 beta 5",
+        "2.0.0rc2",
         "nightly"
       ],
       "metadata": {
@@ -95,7 +94,7 @@
       "version": "latest"
     },
     "region": "[parameters('location')]",
-    "templateBaseUrl": "https://raw.githubusercontent.com/tomconte/quasardb-arm-template/master/",
+    "templateBaseUrl": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/",
     "virtualNetworkName": "[concat(parameters('namePrefix'), 'vnet')]",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "linuxConfiguration_sshPublicKey": {

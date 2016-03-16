@@ -30,6 +30,10 @@
             "constraints": {
               "allowedValues": [
                 {
+                  "label": "single node",
+                  "value": 1
+                },
+                {
                   "label": "2 nodes",
                   "value": 2
                 },
@@ -48,14 +52,33 @@
                 {
                   "label": "32 nodes",
                   "value": 32
+                }
+              ]
+            }
+          },
+          {
+            "name": "replication",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Replication factor",
+            "defaultValue": "2",
+            "toolTip": "The number of copies of each entry.",
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "no replication",
+                  "value": 1
                 },
                 {
-                  "label": "64 nodes",
-                  "value": 64
+                  "label": "2",
+                  "value": 2
                 },
                 {
-                  "label": "128 nodes",
-                  "value": 128
+                  "label": "3",
+                  "value": 3
+                },
+                {
+                  "label": "4",
+                  "value": 4
                 }
               ]
             }
@@ -96,9 +119,9 @@
             },
             "osPlatform": "Linux",
             "imageReference": {
-              "publisher": "Canonical",
-              "offer": "UbuntuServer",
-              "sku": "14.04.2-LTS"
+              "publisher": "quasardb",
+              "offer": "quasardb-xtp-node",
+              "sku": "20rc4"
             },
             "count": "[steps('cluster').nodeCount]"
           },
@@ -139,28 +162,9 @@
             "imageReference": {
               "publisher": "Canonical",
               "offer": "UbuntuServer",
-              "sku": "14.04.2-LTS"
+              "sku": "14.04.3-LTS"
             },
             "count": 1
-          },
-          {
-            "name": "quasardbVersion",
-            "type": "Microsoft.Common.DropDown",
-            "label": "quasardb version",
-            "defaultValue": "2.0.0rc2",
-            "toolTip": "The version of quasardb to install.",
-            "constraints": {
-              "allowedValues": [
-                {
-                  "label": "2.0.0rc2",
-                  "value": "2.0.0rc2"
-                },
-                {
-                  "label": "nightly",
-                  "value": "nightly"
-                }
-              ]
-            }
           }
         ]
       },
@@ -210,9 +214,9 @@
       "sshPublicKey": "[steps('credentials').adminCredentials.sshPublicKey]",
       "storageAccountName": "[steps('cluster').storageAccount.name]",
       "nodeCount": "[steps('cluster').nodeCount]",
+      "replication": "[steps('cluster').replication]",
       "nodeSize": "[steps('cluster').nodeSize]",
       "jumpboxSize": "[steps('cluster').jumpboxSize]",
-      "quasardbVersion": "[steps('cluster').quasardbVersion]",
       "location": "[location()]"
     }
   }

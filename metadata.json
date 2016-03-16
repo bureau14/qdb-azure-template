@@ -1,7 +1,7 @@
 {
-  "itemDisplayName": "QuasarDB cluster on Ubuntu VMs",
-  "description": "This template installs and configures a QuasarDB cluster on Ubuntu Virtual Machines.",
-  "summary": "This template installs and configures a QuasarDB cluster on Ubuntu Virtual Machines.",
+  "itemDisplayName": "quasardb cluster on Ubuntu VMs",
+  "description": "This template installs and configures a quasardb cluster on Ubuntu Virtual Machines.",
+  "summary": "This template installs and configures a quasardb cluster on Ubuntu Virtual Machines.",
   "githubUsername": "bblanchon",
-  "dateUpdated": "2015-11-09"
+  "dateUpdated": "2016-03-16"
 }

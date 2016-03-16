@@ -23,14 +23,14 @@
     },
     "adminPassword": {
       "type": "securestring",
-      "defaultValue": "", 
+      "defaultValue": "",
       "metadata": {
         "description": "Password for the Virtual Machine. Not used if authenticationType of sshPublicKey."
       }
     },
     "sshPublicKey": {
       "type": "string",
-      "defaultValue": "", 
+      "defaultValue": "",
       "metadata": {
         "description": "SSH RSA public key file as a string. Not used if authenticationType of password."
       }
@@ -55,6 +55,15 @@
         "description": "Number of nodes in the cluster"
       }
     },
+    "replication": {
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 1,
+      "maxValue": 4,
+      "metadata": {
+        "description": "Data replication factor"
+      }
+    },
     "nodeSize": {
       "type": "string",
       "defaultValue": "Standard_A2",
@@ -68,17 +77,6 @@
       "metadata": {
         "description": "Size of the virtual machine for the jumbox"
       }
-    },
-    "quasardbVersion": {
-      "type": "string",
-      "defaultValue": "2.0.0rc2",
-      "allowedValues": [
-        "2.0.0rc2",
-        "nightly"
-      ],
-      "metadata": {
-        "description": "QuasarDB's version to install"
-      }
     }
   },
   "variables": {
@@ -87,10 +85,16 @@
     "nodesIpPrefix": "10.0.0.",
     "nodeName": "[concat(parameters('namePrefix'), 'node')]",
     "jumpboxName": "[concat(parameters('namePrefix'), 'jumpbox')]",
-    "imageReference": {
+    "jumpboxImage": {
       "publisher": "Canonical",
       "offer": "UbuntuServer",
       "sku": "14.04.3-LTS",
+      "version": "latest"
+    },
+    "nodeImage": {
+      "publisher": "quasardb",
+      "offer": "quasardb-xtp-node",
+      "sku": "20rc4",
       "version": "latest"
     },
     "region": "[parameters('location')]",
@@ -108,7 +112,7 @@
         ]
       }
     },
-    "linuxConfiguration_password": { },
+    "linuxConfiguration_password": {},
     "linuxConfiguration": "[variables(concat('linuxConfiguration_',parameters('authenticationType')))]"
   },
   "resources": [
@@ -124,7 +128,7 @@
         },
         "parameters": {
           "location": {
-            "value": "[variables('region')]" 
+            "value": "[variables('region')]"
           },
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
@@ -137,71 +141,6 @@
           },
           "virtualNetworkName": {
             "value": "[variables('virtualNetworkName')]"
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat(variables('nodeName'), '0')]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "shared-resources"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'), 'node-resources.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "location": {
-            "value": "[variables('region')]" 
-          },
-          "availabilitySet": {
-            "value": "[variables('availabilitySet')]"
-          },
-          "ipAddress": {
-            "value": "[concat(variables('nodesIpPrefix'), '10')]"
-          },
-          "nodeCount": {
-            "value": "[parameters('nodeCount')]"
-          },
-          "nodeIndex": {
-            "value": 0
-          },
-          "peerAddress": {
-            "value": "[concat(variables('nodesIpPrefix'), 10)]"
-          },
-          "quasardbVersion": {
-            "value": "[parameters('quasardbVersion')]"
-          },
-          "subnetName": {
-            "value": "[variables('subnetName')]"
-          },
-          "storageAccountName": {
-            "value": "[parameters('storageAccountName')]"
-          },
-          "templateBaseUrl": {
-            "value": "[variables('templateBaseUrl')]"
-          },
-          "virtualNetworkName": {
-            "value": "[variables('virtualNetworkName')]"
-          },
-          "vmImage": {
-            "value": "[variables('imageReference')]"
-          },
-          "vmPassword": {
-            "value": "[parameters('adminPassword')]"
-          },
-          "vmLinuxConfig": {
-            "value": "[variables('linuxConfiguration')]"
-          },
-          "vmSize": {
-            "value": "[parameters('nodeSize')]"
-          },
-          "vmUser": {
-            "value": "[parameters('adminUsername')]"
           }
         }
       }
@@ -211,11 +150,11 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[concat(variables('nodeName'), '0')]"
+        "shared-resources"
       ],
       "copy": {
         "name": "clusterNodesLoop",
-        "count": "[sub(parameters('nodeCount'),1)]"
+        "count": "[parameters('nodeCount')]"
       },
       "properties": {
         "mode": "Incremental",
@@ -225,25 +164,22 @@
         },
         "parameters": {
           "location": {
-            "value": "[variables('region')]" 
+            "value": "[variables('region')]"
           },
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
           },
           "ipAddress": {
-            "value": "[concat(variables('nodesIpPrefix'), copyindex(11))]"
+            "value": "[concat(variables('nodesIpPrefix'), copyindex(10))]"
           },
-          "nodeCount": {
-            "value": "[parameters('nodeCount')]"
+          "nodeId": {
+            "value": "[concat(copyindex(1),'/',parameters('nodeCount'))]"
           },
-          "nodeIndex": {
-            "value": "[copyindex(1)]"
+          "replication": {
+            "value": "[parameters('replication')]"
           },
           "peerAddress": {
             "value": "[concat(variables('nodesIpPrefix'), 10)]"
-          },
-          "quasardbVersion": {
-            "value": "[parameters('quasardbVersion')]"
           },
           "subnetName": {
             "value": "[variables('subnetName')]"
@@ -258,7 +194,7 @@
             "value": "[variables('virtualNetworkName')]"
           },
           "vmImage": {
-            "value": "[variables('imageReference')]"
+            "value": "[variables('nodeImage')]"
           },
           "vmPassword": {
             "value": "[parameters('adminPassword')]"
@@ -280,7 +216,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[concat(variables('nodeName'), '0')]"
+        "[concat(variables('nodeName'), '1')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -290,16 +226,13 @@
         },
         "parameters": {
           "location": {
-            "value": "[variables('region')]" 
+            "value": "[variables('region')]"
           },
           "ipAddress": {
             "value": "10.0.0.4"
           },
           "peerAddress": {
             "value": "10.0.0.10"
-          },
-          "quasardbVersion": {
-            "value": "[parameters('quasardbVersion')]"
           },
           "subnetName": {
             "value": "[variables('subnetName')]"
@@ -314,7 +247,7 @@
             "value": "[variables('virtualNetworkName')]"
           },
           "vmImage": {
-            "value": "[variables('imageReference')]"
+            "value": "[variables('jumpboxImage')]"
           },
           "vmPassword": {
             "value": "[parameters('adminPassword')]"

@@ -18,7 +18,8 @@
     "value": "Standard_A1"
   },
   "testboxSize": {
-    "value": "Standard_A1"
+    "value": "Standard_A1
+    "
   },
   "location": {
     "value": "northeurope"

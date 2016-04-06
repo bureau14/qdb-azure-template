@@ -25,9 +25,8 @@
     "storageAccountName": {
       "type": "string"
     },
-    "templateBaseUrl": {
-      "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/"
+    "baseUrl": {
+      "type": "string"
     },
     "networkName": {
       "type": "string"
@@ -50,8 +49,8 @@
   },
   "variables": {
     "filesToDownload": [
-      "[concat(parameters('templateBaseUrl'), 'quasardbTestbox.setup.sh')]",
-      "[concat(parameters('templateBaseUrl'), 'quasardbTestbox.motd.txt')]",
+      "[concat(parameters('baseUrl'), '/quasardbTestbox.setup.sh')]",
+      "[concat(parameters('baseUrl'), '/quasardbTestbox.motd.txt')]",
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/web-bridge/qdb-web-bridge_2.0.0-1.deb",
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/utils/qdb-utils_2.0.0-1.deb",
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/api/c/qdb-api_2.0.0-1.deb",

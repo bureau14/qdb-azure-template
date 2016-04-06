@@ -9,7 +9,8 @@ rm -f $ZIPFILE
     availabilitySet.json      \
     createUiDefinition.json   \
     mainTemplate.json         \
-    node-*.*                  \
+    quasardbNode.json         \
+    quasardbNode.setup.sh     \
     quasardbTestbox.json      \
     quasardbTestbox.motd.txt  \
     quasardbTestbox.setup.sh  \

@@ -29,7 +29,7 @@
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/"
     },
-    "virtualNetworkName": {
+    "networkName": {
       "type": "string"
     },
     "vmImage": {
@@ -59,12 +59,12 @@
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/api/php/quasardb-2.0.0.tgz",
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/bench/qdb-benchmark-2.0.0-Linux.tar.gz"
     ],
-    "vmStorageAccountContainerName": "vhd",
+    "storageAccountContainerName": "vhd",
     "vmName": "[concat(deployment().name,'-vm')]",
     "nicName": "[concat(deployment().name,'-nic')]",
     "publicIpName": "[concat(deployment().name,'-publicIp')]",
     "region": "[parameters('location')]",
-    "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName')),'/subnets/',parameters('subnetName'))]",
+    "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('networkName')),'/subnets/',parameters('subnetName'))]",
     "commandToExecute": "[concat('bash jumpbox-setup.sh --address=',parameters('ipAddress'),':',parameters('httpPort'),' --node=',parameters('peerAddress'),':',parameters('qdbPort'))]"
   },
   "resources": [
@@ -129,7 +129,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',deployment().name,'-os-disk.vhd')]"
+              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('storageAccountContainerName'),'/',deployment().name,'-os-disk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"

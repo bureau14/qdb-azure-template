@@ -41,6 +41,18 @@
         "description": "Storage account name"
       }
     },
+    "storageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage account type"
+      }
+    },
     "namePrefix": {
       "type": "string",
       "defaultValue": "qdb-",
@@ -99,7 +111,7 @@
     },
     "region": "[parameters('location')]",
     "templateBaseUrl": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/",
-    "virtualNetworkName": "[concat(parameters('namePrefix'), 'vnet')]",
+    "networkName": "[concat(parameters('namePrefix'), 'vnet')]",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "linuxConfiguration_sshPublicKey": {
       "disablePasswordAuthentication": "true",
@@ -117,13 +129,13 @@
   },
   "resources": [
     {
-      "name": "shared-resources",
+      "name": "availabilitySet",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'), 'shared-resources.json')]",
+          "uri": "[concat(variables('templateBaseUrl'), 'availabilitySet.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -132,15 +144,52 @@
           },
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "storageAccount",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateBaseUrl'), 'storageAccount.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[variables('region')]"
           },
           "storageAccountName": {
             "value": "[parameters('storageAccountName')]"
           },
+          "storageAccountType": {
+            "value": "[parameters('storageAccountType')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "virtualNetwork",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateBaseUrl'), 'virtualNetwork.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[variables('region')]"
+          },
           "subnetName": {
             "value": "[variables('subnetName')]"
           },
-          "virtualNetworkName": {
-            "value": "[variables('virtualNetworkName')]"
+          "networkName": {
+            "value": "[variables('networkName')]"
           }
         }
       }
@@ -150,7 +199,9 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "shared-resources"
+        "availabilitySet",
+        "storageAccount",
+        "virtualNetwork"
       ],
       "copy": {
         "name": "clusterNodesLoop",
@@ -190,8 +241,8 @@
           "templateBaseUrl": {
             "value": "[variables('templateBaseUrl')]"
           },
-          "virtualNetworkName": {
-            "value": "[variables('virtualNetworkName')]"
+          "networkName": {
+            "value": "[variables('networkName')]"
           },
           "vmImage": {
             "value": "[variables('nodeImage')]"
@@ -243,8 +294,8 @@
           "templateBaseUrl": {
             "value": "[variables('templateBaseUrl')]"
           },
-          "virtualNetworkName": {
-            "value": "[variables('virtualNetworkName')]"
+          "networkName": {
+            "value": "[variables('networkName')]"
           },
           "vmImage": {
             "value": "[variables('jumpboxImage')]"

@@ -38,7 +38,7 @@
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/bureau14/qdb-azure-template/master/"
     },
-    "virtualNetworkName": {
+    "networkName": {
       "type": "string"
     },
     "vmImage": {
@@ -60,9 +60,9 @@
   "variables": {
     "vmName": "[concat(deployment().name,'-vm')]",
     "nicName": "[concat(deployment().name,'-nic')]",
-    "vmStorageAccountContainerName": "vhd",
+    "storageAccountContainerName": "vhd",
     "region": "[parameters('location')]",
-    "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/', parameters('subnetName'))]",
+    "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('networkName')), '/subnets/', parameters('subnetName'))]",
     "filesToDownload": [
       "[concat(parameters('templateBaseUrl'), 'node-setup.sh')]"
     ],
@@ -120,7 +120,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/', deployment().name,'-os-disk.vhd')]"
+              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('storageAccountContainerName'),'/', deployment().name,'-os-disk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"

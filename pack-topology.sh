@@ -6,8 +6,10 @@ ZIPFILE="topology-$VERSION.zip"
 rm -f $ZIPFILE
 
 7z a $ZIPFILE               \
+    availabilitySet.json    \
     createUiDefinition.json \
     jumpbox-*.*             \
     mainTemplate.json       \
     node-*.*                \
-    shared-*.*
+    storageAccount.json     \
+    virtualNetwork.json

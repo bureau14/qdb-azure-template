@@ -5,30 +5,23 @@
     "location": {
       "type": "string"
     },
-    "availabilitySet": {
-      "type": "string"
-    },
-    "storageAccountName": {
-      "type": "string"
-    },
     "subnetName": {
       "type": "string"
     },
-    "virtualNetworkName": {
+    "networkName": {
       "type": "string"
     }
   },
   "variables": {
     "addressPrefix": "10.0.0.0/16",
-    "region": "[parameters('location')]",
     "subnetPrefix": "10.0.0.0/24"
   },
   "resources": [
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('virtualNetworkName')]",
-      "location": "[variables('region')]",
+      "name": "[parameters('networkName')]",
+      "location": "[parameters('location')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -43,22 +36,6 @@
             }
           }
         ]
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/availabilitySets",
-      "name": "[parameters('availabilitySet')]",
-      "location": "[variables('region')]",
-      "properties": {}
-    },
-    {
-      "name": "[parameters('storageAccountName')]",
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2015-06-15",
-      "location": "[variables('region')]",
-      "properties": {
-        "accountType": "Standard_LRS"
       }
     }
   ]

@@ -17,6 +17,13 @@
             "name": "storageAccount",
             "type": "Microsoft.Storage.StorageAccountSelector",
             "label": "Storage account",
+            "constraints": {
+              "allowedTypes": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Premium_LRS"
+              ]
+            },
             "defaultValue": {
               "type": "Standard_LRS"
             }
@@ -87,7 +94,7 @@
             "name": "nodeSize",
             "type": "Microsoft.Compute.SizeSelector",
             "label": "Node size",
-            "toolTip": "The size of virtual machine to for each cluster node.",
+            "toolTip": "The size of virtual machine for each cluster node.",
             "recommendedSizes": [
               "Standard_A4",
               "Standard_D4",
@@ -213,6 +220,7 @@
       "adminPassword": "[steps('credentials').adminCredentials.password]",
       "sshPublicKey": "[steps('credentials').adminCredentials.sshPublicKey]",
       "storageAccountName": "[steps('cluster').storageAccount.name]",
+      "storageAccountType": "[steps('cluster').storageAccount.type]",
       "nodeCount": "[steps('cluster').nodeCount]",
       "replication": "[steps('cluster').replication]",
       "nodeSize": "[steps('cluster').nodeSize]",

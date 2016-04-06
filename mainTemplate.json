@@ -10,6 +10,7 @@
     },
     "authenticationType": {
       "type": "string",
+      "defaultValue": "password",
       "allowedValues": [
         "password",
         "sshPublicKey"
@@ -62,7 +63,7 @@
     },
     "nodeCount": {
       "type": "int",
-      "defaultValue": 3,
+      "defaultValue": 2,
       "metadata": {
         "description": "Number of nodes in the cluster"
       }
@@ -78,16 +79,16 @@
     },
     "nodeSize": {
       "type": "string",
-      "defaultValue": "Standard_A2",
+      "defaultValue": "Standard_A1",
       "metadata": {
         "description": "Size of the virtual machines for each node"
       }
     },
-    "jumpboxSize": {
+    "testboxSize": {
       "type": "string",
-      "defaultValue": "Standard_A4",
+      "defaultValue": "Standard_A1",
       "metadata": {
-        "description": "Size of the virtual machine for the jumbox"
+        "description": "Size of the virtual machine for the testbox"
       }
     }
   },
@@ -96,8 +97,8 @@
     "subnetName": "quasardb",
     "nodesIpPrefix": "10.0.0.",
     "nodeName": "[concat(parameters('namePrefix'), 'node')]",
-    "jumpboxName": "[concat(parameters('namePrefix'), 'jumpbox')]",
-    "jumpboxImage": {
+    "testboxName": "[concat(parameters('namePrefix'), 'testbox')]",
+    "testboxImage": {
       "publisher": "Canonical",
       "offer": "UbuntuServer",
       "sku": "14.04.3-LTS",
@@ -263,7 +264,7 @@
       }
     },
     {
-      "name": "[variables('jumpboxName')]",
+      "name": "[variables('testboxName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -272,7 +273,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'), 'jumpbox-resources.json')]",
+          "uri": "[concat(variables('templateBaseUrl'), 'quasardbTestbox.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -298,7 +299,7 @@
             "value": "[variables('networkName')]"
           },
           "vmImage": {
-            "value": "[variables('jumpboxImage')]"
+            "value": "[variables('testboxImage')]"
           },
           "vmPassword": {
             "value": "[parameters('adminPassword')]"
@@ -307,7 +308,7 @@
             "value": "[variables('linuxConfiguration')]"
           },
           "vmSize": {
-            "value": "[parameters('jumpboxSize')]"
+            "value": "[parameters('testboxSize')]"
           },
           "vmUser": {
             "value": "[parameters('adminUsername')]"
@@ -319,7 +320,7 @@
   "outputs": {
     "publicAddress": {
       "type": "string",
-      "value": "[concat(reference(variables('jumpboxName')).outputs.domainNameLabel.value,'.',variables('region'),'.cloudapp.azure.com')]",
+      "value": "[concat(reference(variables('testboxName')).outputs.domainNameLabel.value,'.',variables('region'),'.cloudapp.azure.com')]",
       "metadata": {
         "description": "SSH to this public address to access the jump box."
       }

@@ -18,4 +18,4 @@ qdb_httpd --gen-config --config=/etc/qdb/qdb_httpd.conf.orig $* > /etc/qdb/qdb_h
 rm /etc/qdb/qdb_httpd.conf.orig
 service qdb_httpd start
 
-mv -f 'jumpbox-motd.txt' '/etc/motd'
+mv -f 'quasardbTestbox.motd.txt' '/etc/motd'

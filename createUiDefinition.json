@@ -32,7 +32,7 @@
             "name": "nodeCount",
             "type": "Microsoft.Common.DropDown",
             "label": "Cluster size",
-            "defaultValue": "8 nodes",
+            "defaultValue": "4 nodes",
             "toolTip": "The number of nodes in the cluster.",
             "constraints": {
               "allowedValues": [
@@ -96,13 +96,12 @@
             "label": "Node size",
             "toolTip": "The size of virtual machine for each cluster node.",
             "recommendedSizes": [
-              "Standard_A4",
-              "Standard_D4",
-              "Standard_D14"
+              "Standard_A3",
+              "Standard_A7",
+              "Standard_D4"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_A0",
                 "Standard_A1",
                 "Standard_A2",
                 "Standard_A3",
@@ -121,7 +120,17 @@
                 "Standard_D11",
                 "Standard_D12",
                 "Standard_D13",
-                "Standard_D14"
+                "Standard_D14",
+                "Standard_D1_v2",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_D11_v2",
+                "Standard_D12_v2",
+                "Standard_D13_v2",
+                "Standard_D14_v2",
+                "Standard_D15_v2"
               ]
             },
             "osPlatform": "Linux",
@@ -133,17 +142,17 @@
             "count": "[steps('cluster').nodeCount]"
           },
           {
-            "name": "jumpboxSize",
+            "name": "testboxSize",
             "type": "Microsoft.Compute.SizeSelector",
-            "label": "Jumpbox size",
-            "toolTip": "The size of virtual machine for the jumpbox.",
+            "label": "Test box size",
+            "toolTip": "The size of virtual machine for the test box.",
             "recommendedSizes": [
-              "Standard_A9",
+              "Standard_D4",
+              "Standard_A7",
               "Standard_D14"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_A0",
                 "Standard_A1",
                 "Standard_A2",
                 "Standard_A3",
@@ -162,7 +171,17 @@
                 "Standard_D11",
                 "Standard_D12",
                 "Standard_D13",
-                "Standard_D14"
+                "Standard_D14",
+                "Standard_D1_v2",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_D11_v2",
+                "Standard_D12_v2",
+                "Standard_D13_v2",
+                "Standard_D14_v2",
+                "Standard_D15_v2"
               ]
             },
             "osPlatform": "Linux",
@@ -224,7 +243,7 @@
       "nodeCount": "[steps('cluster').nodeCount]",
       "replication": "[steps('cluster').replication]",
       "nodeSize": "[steps('cluster').nodeSize]",
-      "jumpboxSize": "[steps('cluster').jumpboxSize]",
+      "testboxSize": "[steps('cluster').testboxSize]",
       "location": "[location()]"
     }
   }

@@ -7,7 +7,7 @@
            | |
            |_|
 
-Welcome to the quasardb Azure jumpbox!
+Welcome to the quasardb Azure testbox!
 
 This machine is connected to the quasardb cluster.
 
@@ -25,5 +25,11 @@ Or the PHP API:
 
     php -a
     > $cluster = new QdbCluster('qdb://10.0.0.10:2836');
+
+There is also a performance testing tool installed:
+
+    qdb-benchmark -c qdb://10.0.0.10:2836 --tests qdb_*
+
+Note: the speed of the testbox is often the limiting factor.
 
 Enjoy!

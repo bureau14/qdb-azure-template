@@ -50,8 +50,8 @@
   },
   "variables": {
     "filesToDownload": [
-      "[concat(parameters('templateBaseUrl'), 'jumpbox-setup.sh')]",
-      "[concat(parameters('templateBaseUrl'), 'jumpbox-motd.txt')]",
+      "[concat(parameters('templateBaseUrl'), 'quasardbTestbox.setup.sh')]",
+      "[concat(parameters('templateBaseUrl'), 'quasardbTestbox.motd.txt')]",
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/web-bridge/qdb-web-bridge_2.0.0-1.deb",
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/utils/qdb-utils_2.0.0-1.deb",
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/api/c/qdb-api_2.0.0-1.deb",
@@ -65,7 +65,7 @@
     "publicIpName": "[concat(deployment().name,'-publicIp')]",
     "region": "[parameters('location')]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('networkName')),'/subnets/',parameters('subnetName'))]",
-    "commandToExecute": "[concat('bash jumpbox-setup.sh --address=',parameters('ipAddress'),':',parameters('httpPort'),' --node=',parameters('peerAddress'),':',parameters('qdbPort'))]"
+    "commandToExecute": "[concat('bash quasardbTestbox.setup.sh --address=',parameters('ipAddress'),':',parameters('httpPort'),' --node=',parameters('peerAddress'),':',parameters('qdbPort'))]"
   },
   "resources": [
     {

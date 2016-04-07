@@ -40,9 +40,6 @@
     "networkName": {
       "type": "string"
     },
-    "vmImage": {
-      "type": "object"
-    },
     "vmPassword": {
       "type": "string"
     },
@@ -54,11 +51,20 @@
     },
     "vmUser": {
       "type": "string"
+    },
+    "computerName": {
+      "type": "string"
     }
   },
   "variables": {
-    "vmName": "[concat(deployment().name,'-vm')]",
-    "nicName": "[concat(deployment().name,'-nic')]",
+    "vmImage": {
+      "publisher": "quasardb",
+      "offer": "quasardb-xtp-node",
+      "sku": "20rc4",
+      "version": "latest"
+    },
+    "vmName": "[concat(parameters('computerName'),'-vm')]",
+    "nicName": "[concat(parameters('computerName'),'-nic')]",
     "storageAccountContainerName": "vhd",
     "region": "[parameters('location')]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('networkName')), '/subnets/', parameters('subnetName'))]",
@@ -94,9 +100,9 @@
       "name": "[variables('vmName')]",
       "location": "[variables('region')]",
       "plan": {
-        "name": "[parameters('vmImage').sku]",
-        "publisher": "[parameters('vmImage').publisher]",
-        "product": "[parameters('vmImage').offer]"
+        "name": "[variables('vmImage').sku]",
+        "publisher": "[variables('vmImage').publisher]",
+        "product": "[variables('vmImage').offer]"
       },
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
@@ -109,17 +115,17 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[deployment().name]",
+          "computerName": "[parameters('computerName')]",
           "adminUsername": "[parameters('vmUser')]",
           "adminPassword": "[parameters('vmPassword')]",
           "linuxConfiguration": "[parameters('vmLinuxConfig')]"
         },
         "storageProfile": {
-          "imageReference": "[parameters('vmImage')]",
+          "imageReference": "[variables('vmImage')]",
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('storageAccountContainerName'),'/', deployment().name,'-os-disk.vhd')]"
+              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('storageAccountContainerName'),'/', parameters('computerName'),'-os-disk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"

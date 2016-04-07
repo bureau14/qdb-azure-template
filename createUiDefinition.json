@@ -5,13 +5,13 @@
     "basics": [],
     "steps": [
       {
-        "name": "cluster",
-        "label": "Cluster",
+        "name": "storage",
+        "label": "Storage",
         "subLabel": {
-          "preValidation": "Configure cluster settings",
+          "preValidation": "Configure storage account",
           "postValidation": "Done"
         },
-        "bladeTitle": "Cluster",
+        "bladeTitle": "Storage",
         "elements": [
           {
             "name": "storageAccount",
@@ -27,13 +27,24 @@
             "defaultValue": {
               "type": "Standard_LRS"
             }
-          },
+          }
+        ]
+      },
+      {
+        "name": "cluster",
+        "label": "Cluster",
+        "subLabel": {
+          "preValidation": "Configure cluster settings",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Cluster",
+        "elements": [
           {
             "name": "nodeCount",
             "type": "Microsoft.Common.DropDown",
             "label": "Cluster size",
             "defaultValue": "4 nodes",
-            "toolTip": "The number of nodes in the cluster.",
+            "toolTip": "The number of virtual machines.",
             "constraints": {
               "allowedValues": [
                 {
@@ -91,10 +102,10 @@
             }
           },
           {
-            "name": "nodeSize",
+            "name": "vmSize",
             "type": "Microsoft.Compute.SizeSelector",
             "label": "Node size",
-            "toolTip": "The size of virtual machine for each cluster node.",
+            "toolTip": "The size of virtual machines.",
             "recommendedSizes": [
               "Standard_A3",
               "Standard_A7",
@@ -140,12 +151,49 @@
               "sku": "20rc4"
             },
             "count": "[steps('cluster').nodeCount]"
+          }
+        ]
+      },
+      {
+        "name": "testbox",
+        "label": "Testbox",
+        "subLabel": {
+          "preValidation": "Configure testbox settings",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Testbox",
+        "elements": [
+          {
+            "name": "publicIp",
+            "type": "Microsoft.Network.PublicIpAddressCombo",
+            "label": {
+              "publicIpAddress": "Public IP Address",
+              "domainNameLabel": "Domain Name Prefix"
+            },
+            "toolTip": {
+              "publicIpAddress": "",
+              "domainNameLabel": ""
+            },
+            "defaultValue": {
+              "publicIpAddressName": "qdb-testbox-publicIp",
+              "domainNameLabel": "[steps('storage').storageAccount.name]"
+            },
+            "constraints": {
+              "required": {
+                "domainNameLabel": true
+              }
+            },
+            "options": {
+              "hideNone": true,
+              "hideDomainNameLabel": false,
+              "hideExisting": true
+            }
           },
           {
-            "name": "testboxSize",
+            "name": "vmSize",
             "type": "Microsoft.Compute.SizeSelector",
             "label": "Test box size",
-            "toolTip": "The size of virtual machine for the test box.",
+            "toolTip": "The size of virtual machine.",
             "recommendedSizes": [
               "Standard_D4",
               "Standard_A7",
@@ -238,12 +286,14 @@
       "authenticationType": "[steps('credentials').adminCredentials.authenticationType]",
       "adminPassword": "[steps('credentials').adminCredentials.password]",
       "sshPublicKey": "[steps('credentials').adminCredentials.sshPublicKey]",
-      "storageAccountName": "[steps('cluster').storageAccount.name]",
-      "storageAccountType": "[steps('cluster').storageAccount.type]",
+      "storageAccountName": "[steps('storage').storageAccount.name]",
+      "storageAccountType": "[steps('storage').storageAccount.type]",
       "nodeCount": "[steps('cluster').nodeCount]",
       "replication": "[steps('cluster').replication]",
-      "nodeSize": "[steps('cluster').nodeSize]",
-      "testboxSize": "[steps('cluster').testboxSize]",
+      "nodeSize": "[steps('cluster').vmSize]",
+      "testboxSize": "[steps('testbox').testboxSize]",
+      "domainNameLabel": "[steps('testbox').publicIp.domainNameLabel]",
+      "publicIpName": "[steps('testbox').publicIp.name]",
       "location": "[location()]"
     }
   }

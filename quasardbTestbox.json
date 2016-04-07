@@ -31,9 +31,6 @@
     "networkName": {
       "type": "string"
     },
-    "vmImage": {
-      "type": "object"
-    },
     "vmPassword": {
       "type": "string"
     },
@@ -44,6 +41,12 @@
       "type": "string"
     },
     "vmUser": {
+      "type": "string"
+    },
+    "publicIpName": {
+      "type": "string"
+    },
+    "computerName": {
       "type": "string"
     }
   },
@@ -59,34 +62,17 @@
       "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/bench/qdb-benchmark-2.0.0-Linux.tar.gz"
     ],
     "storageAccountContainerName": "vhd",
-    "vmName": "[concat(deployment().name,'-vm')]",
-    "nicName": "[concat(deployment().name,'-nic')]",
-    "publicIpName": "[concat(deployment().name,'-publicIp')]",
-    "region": "[parameters('location')]",
+    "vmName": "[concat(parameters('computerName'),'-vm')]",
+    "nicName": "[concat(parameters('computerName'),'-nic')]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('networkName')),'/subnets/',parameters('subnetName'))]",
     "commandToExecute": "[concat('bash quasardbTestbox.setup.sh --address=',parameters('ipAddress'),':',parameters('httpPort'),' --node=',parameters('peerAddress'),':',parameters('qdbPort'))]"
   },
   "resources": [
     {
       "apiVersion": "2015-06-15",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIpName')]",
-      "location": "[variables('region')]",
-      "properties": {
-        "publicIPAllocationMethod": "Dynamic",
-        "dnsSettings": {
-          "domainNameLabel": "[concat('qdb-', uniqueString(resourceGroup().id))]"
-        }
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
-      "location": "[variables('region')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIpName'))]"
-      ],
+      "location": "[parameters('location')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -95,7 +81,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('ipAddress')]",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIpName'))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIpName'))]"
               },
               "subnet": {
                 "id": "[variables('subnetRef')]"
@@ -109,7 +95,7 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmName')]",
-      "location": "[variables('region')]",
+      "location": "[parameters('location')]",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
@@ -118,17 +104,22 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[deployment().name]",
+          "computerName": "[parameters('computerName')]",
           "adminUsername": "[parameters('vmUser')]",
           "adminPassword": "[parameters('vmPassword')]",
           "linuxConfiguration": "[parameters('vmLinuxConfig')]"
         },
         "storageProfile": {
-          "imageReference": "[parameters('vmImage')]",
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "14.04.3-LTS",
+            "version": "latest"
+          },
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('storageAccountContainerName'),'/',deployment().name,'-os-disk.vhd')]"
+              "uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/',variables('storageAccountContainerName'),'/',parameters('computerName'),'-os-disk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -147,7 +138,7 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmName'), '/setup')]",
       "apiVersion": "2015-06-15",
-      "location": "[variables('region')]",
+      "location": "[parameters('location')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
       ],
@@ -161,11 +152,5 @@
         }
       }
     }
-  ],
-  "outputs": {
-    "domainNameLabel": {
-      "type": "string",
-      "value": "[reference(variables('publicIpName')).dnsSettings.domainNameLabel]"
-    }
-  }
+  ]
 }

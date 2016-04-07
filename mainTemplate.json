@@ -98,6 +98,19 @@
       "metadata": {
         "description": "Size of the virtual machine for the testbox"
       }
+    },
+    "publicIpName": {
+      "type": "string",
+      "defaultValue": "qdb-testbox-publicIp",
+      "metadata": {
+        "description": "The name of the publicIpAddress"
+      }
+    },
+    "domainNameLabel": {
+      "type": "string",
+      "metadata": {
+        "description": "Domain name prefix"
+      }
     }
   },
   "variables": {
@@ -106,19 +119,6 @@
     "nodesIpPrefix": "10.0.0.",
     "nodeName": "[concat(parameters('namePrefix'), 'node')]",
     "testboxName": "[concat(parameters('namePrefix'), 'testbox')]",
-    "testboxImage": {
-      "publisher": "Canonical",
-      "offer": "UbuntuServer",
-      "sku": "14.04.3-LTS",
-      "version": "latest"
-    },
-    "nodeImage": {
-      "publisher": "quasardb",
-      "offer": "quasardb-xtp-node",
-      "sku": "20rc4",
-      "version": "latest"
-    },
-    "region": "[parameters('location')]",
     "networkName": "[concat(parameters('namePrefix'), 'vnet')]",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "linuxConfiguration_sshPublicKey": {
@@ -148,7 +148,7 @@
         },
         "parameters": {
           "location": {
-            "value": "[variables('region')]"
+            "value": "[parameters('location')]"
           },
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
@@ -168,7 +168,7 @@
         },
         "parameters": {
           "location": {
-            "value": "[variables('region')]"
+            "value": "[parameters('location')]"
           },
           "storageAccountName": {
             "value": "[parameters('storageAccountName')]"
@@ -191,7 +191,7 @@
         },
         "parameters": {
           "location": {
-            "value": "[variables('region')]"
+            "value": "[parameters('location')]"
           },
           "subnetName": {
             "value": "[variables('subnetName')]"
@@ -203,7 +203,7 @@
       }
     },
     {
-      "name": "[concat(variables('nodeName'), copyindex(1))]",
+      "name": "[concat('quasardbNode', copyindex(1))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -212,7 +212,7 @@
         "virtualNetwork"
       ],
       "copy": {
-        "name": "clusterNodesLoop",
+        "name": "quasardbNodeLoop",
         "count": "[parameters('nodeCount')]"
       },
       "properties": {
@@ -223,7 +223,7 @@
         },
         "parameters": {
           "location": {
-            "value": "[variables('region')]"
+            "value": "[parameters('location')]"
           },
           "availabilitySet": {
             "value": "[variables('availabilitySet')]"
@@ -252,9 +252,6 @@
           "networkName": {
             "value": "[variables('networkName')]"
           },
-          "vmImage": {
-            "value": "[variables('nodeImage')]"
-          },
           "vmPassword": {
             "value": "[parameters('adminPassword')]"
           },
@@ -266,16 +263,43 @@
           },
           "vmUser": {
             "value": "[parameters('adminUsername')]"
+          },
+          "computerName": {
+            "value": "[concat(variables('nodeName'), copyindex(1))]"
           }
         }
       }
     },
     {
-      "name": "[variables('testboxName')]",
+      "name": "publicIpAddress",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('baseUrl'), '/publicIpAddress.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "domainNameLabel": {
+            "value": "[parameters('domainNameLabel')]"
+          },
+          "publicIpName": {
+            "value": "[parameters('publicIpName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "quasardbTestbox",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[concat(variables('nodeName'), '1')]"
+        "quasardbNode1",
+        "publicIpAddress"
       ],
       "properties": {
         "mode": "Incremental",
@@ -285,7 +309,7 @@
         },
         "parameters": {
           "location": {
-            "value": "[variables('region')]"
+            "value": "[parameters('location')]"
           },
           "ipAddress": {
             "value": "10.0.0.4"
@@ -305,9 +329,6 @@
           "networkName": {
             "value": "[variables('networkName')]"
           },
-          "vmImage": {
-            "value": "[variables('testboxImage')]"
-          },
           "vmPassword": {
             "value": "[parameters('adminPassword')]"
           },
@@ -319,6 +340,12 @@
           },
           "vmUser": {
             "value": "[parameters('adminUsername')]"
+          },
+          "publicIpName": {
+            "value": "[parameters('publicIpName')]"
+          },
+          "computerName": {
+            "value": "[variables('testboxName')]"
           }
         }
       }
@@ -327,7 +354,7 @@
   "outputs": {
     "publicAddress": {
       "type": "string",
-      "value": "[concat(reference(variables('testboxName')).outputs.domainNameLabel.value,'.',variables('region'),'.cloudapp.azure.com')]",
+      "value": "[concat(parameters('domainNameLabel'),'.',parameters('location'),'.cloudapp.azure.com')]",
       "metadata": {
         "description": "SSH to this public address to access the jump box."
       }

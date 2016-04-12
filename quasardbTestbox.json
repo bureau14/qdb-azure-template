@@ -48,6 +48,9 @@
     },
     "computerName": {
       "type": "string"
+    },
+    "NSGName": {
+      "type": "string"
     }
   },
   "variables": {
@@ -88,7 +91,10 @@
               }
             }
           }
-        ]
+        ],
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSGName'))]"
+        } 
       }
     },
     {

@@ -120,6 +120,7 @@
     "nodeName": "[concat(parameters('namePrefix'), 'node')]",
     "testboxName": "[concat(parameters('namePrefix'), 'testbox')]",
     "networkName": "[concat(parameters('namePrefix'), 'vnet')]",
+    "NSGName": "[concat(parameters('namePrefix'), 'nsg')]",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "linuxConfiguration_sshPublicKey": {
       "disablePasswordAuthentication": "true",
@@ -271,6 +272,26 @@
       }
     },
     {
+      "name": "networkSecurityGroup",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('baseUrl'), '/networkSecurityGroup.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "NSGName": {
+            "value": "[variables('NSGName')]"
+          }
+        }
+      }
+    },
+    {
       "name": "publicIpAddress",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -346,6 +367,9 @@
           },
           "computerName": {
             "value": "[variables('testboxName')]"
+          },
+          "NSGName": {
+            "value": "[variables('NSGName')]"
           }
         }
       }

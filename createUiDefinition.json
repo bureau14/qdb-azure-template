@@ -175,8 +175,7 @@
               "domainNameLabel": ""
             },
             "defaultValue": {
-              "publicIpAddressName": "qdb-testbox-publicIp",
-              "domainNameLabel": "[steps('storage').storageAccount.name]"
+              "publicIpAddressName": "qdb-testbox-publicIp"
             },
             "constraints": {
               "required": {

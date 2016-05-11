@@ -5,10 +5,10 @@
     "location": {
       "type": "string"
     },
-    "storageAccountName": {
+    "accountName": {
       "type": "string"
     },
-    "storageAccountType": {
+    "accountType": {
       "type": "string",
       "allowedValues": [
         "Standard_LRS",
@@ -19,12 +19,12 @@
   },
   "resources": [
     {
-      "name": "[parameters('storageAccountName')]",
+      "name": "[parameters('accountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2015-06-15",
       "location": "[parameters('location')]",
       "properties": {
-        "accountType": "[parameters('storageAccountType')]"
+        "accountType": "[parameters('accountType')]"
       }
     }
   ]

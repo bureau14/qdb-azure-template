@@ -49,7 +49,7 @@
     "computerName": {
       "type": "string"
     },
-    "NSGName": {
+    "nsgName": {
       "type": "string"
     }
   },
@@ -57,12 +57,12 @@
     "filesToDownload": [
       "[concat(parameters('baseUrl'), '/quasardbTestbox.setup.sh')]",
       "[concat(parameters('baseUrl'), '/quasardbTestbox.motd.txt')]",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/web-bridge/qdb-web-bridge_2.0.0-1.deb",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/utils/qdb-utils_2.0.0-1.deb",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/api/c/qdb-api_2.0.0-1.deb",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/api/python/qdb_python_api-2.0.0rc2-py2.7-linux-x86_64.egg",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/api/php/quasardb-2.0.0.tgz",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc4/bench/qdb-benchmark-2.0.0-Linux.tar.gz"
+      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/web-bridge/qdb-web-bridge_2.0.0-1.deb",
+      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/utils/qdb-utils_2.0.0-1.deb",
+      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/api/c/qdb-api_2.0.0-1.deb",
+      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/api/python/qdb_python_api-2.0.0rc6-py2.7-linux-x86_64.egg",
+      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/api/php/quasardb-2.0.0.tgz",
+      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/bench/qdb-benchmark-2.0.0-Linux.tar.gz"
     ],
     "storageAccountContainerName": "vhd",
     "vmName": "[concat(parameters('computerName'),'-vm')]",
@@ -72,7 +72,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
       "location": "[parameters('location')]",
@@ -93,12 +93,12 @@
           }
         ],
         "networkSecurityGroup": {
-          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSGName'))]"
-        } 
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+        }
       }
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-03-30",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmName')]",
       "location": "[parameters('location')]",
@@ -143,7 +143,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmName'), '/setup')]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-03-30",
       "location": "[parameters('location')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"

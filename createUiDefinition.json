@@ -148,7 +148,7 @@
             "imageReference": {
               "publisher": "quasardb",
               "offer": "quasardb-xtp-node",
-              "sku": "20rc4"
+              "sku": "20rc6"
             },
             "count": "[steps('cluster').nodeCount]"
           }

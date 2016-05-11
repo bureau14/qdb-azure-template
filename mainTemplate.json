@@ -120,7 +120,7 @@
     "nodeName": "[concat(parameters('namePrefix'), 'node')]",
     "testboxName": "[concat(parameters('namePrefix'), 'testbox')]",
     "networkName": "[concat(parameters('namePrefix'), 'vnet')]",
-    "NSGName": "[concat(parameters('namePrefix'), 'nsg')]",
+    "nsgName": "[concat(parameters('namePrefix'), 'nsg')]",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "linuxConfiguration_sshPublicKey": {
       "disablePasswordAuthentication": "true",
@@ -140,7 +140,7 @@
     {
       "name": "availabilitySet",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
+      "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -160,7 +160,7 @@
     {
       "name": "storageAccount",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
+      "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -171,10 +171,10 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          "storageAccountName": {
+          "accountName": {
             "value": "[parameters('storageAccountName')]"
           },
-          "storageAccountType": {
+          "accountType": {
             "value": "[parameters('storageAccountType')]"
           }
         }
@@ -183,7 +183,7 @@
     {
       "name": "virtualNetwork",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
+      "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -206,7 +206,7 @@
     {
       "name": "[concat('quasardbNode', copyindex(1))]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
+      "apiVersion": "2016-02-01",
       "dependsOn": [
         "availabilitySet",
         "storageAccount",
@@ -274,7 +274,7 @@
     {
       "name": "networkSecurityGroup",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
+      "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -285,8 +285,8 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          "NSGName": {
-            "value": "[variables('NSGName')]"
+          "nsgName": {
+            "value": "[variables('nsgName')]"
           }
         }
       }
@@ -294,7 +294,7 @@
     {
       "name": "publicIpAddress",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
+      "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -317,7 +317,7 @@
     {
       "name": "quasardbTestbox",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
+      "apiVersion": "2016-02-01",
       "dependsOn": [
         "quasardbNode1",
         "publicIpAddress"
@@ -368,8 +368,8 @@
           "computerName": {
             "value": "[variables('testboxName')]"
           },
-          "NSGName": {
-            "value": "[variables('NSGName')]"
+          "nsgName": {
+            "value": "[variables('nsgName')]"
           }
         }
       }

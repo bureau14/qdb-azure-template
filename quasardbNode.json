@@ -60,7 +60,7 @@
     "vmImage": {
       "publisher": "quasardb",
       "offer": "quasardb-xtp-node",
-      "sku": "20rc4",
+      "sku": "20rc6",
       "version": "latest"
     },
     "vmName": "[concat(parameters('computerName'),'-vm')]",
@@ -75,7 +75,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
       "location": "[variables('region')]",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-03-30",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmName')]",
       "location": "[variables('region')]",
@@ -143,7 +143,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmName'), '/setup')]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-03-30",
       "location": "[variables('region')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"

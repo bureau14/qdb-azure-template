@@ -5,20 +5,20 @@
     "location": {
       "type": "string"
     },
-    "NSGName": {
+    "nsgName": {
       "type": "string"
     }
   },
   "resources": [
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/networkSecurityGroups",
-      "name": "[parameters('NSGName')]",
+      "name": "[parameters('nsgName')]",
       "location": "[parameters('location')]",
       "properties": {
         "securityRules": [
           {
-            "name": "ssh",
+            "name": "SSH",
             "properties": {
               "protocol": "Tcp",
               "sourcePortRange": "*",
@@ -26,11 +26,24 @@
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "access": "Allow",
+              "priority": 200,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "HTTP",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "8080",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
               "priority": 100,
               "direction": "Inbound"
             }
           }
-        ] 
+        ]
       }
     }
   ]

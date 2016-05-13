@@ -290,7 +290,7 @@
       "nodeCount": "[steps('cluster').nodeCount]",
       "replication": "[steps('cluster').replication]",
       "nodeSize": "[steps('cluster').vmSize]",
-      "testboxSize": "[steps('testbox').testboxSize]",
+      "testboxSize": "[steps('testbox').vmSize]",
       "domainNameLabel": "[steps('testbox').publicIp.domainNameLabel]",
       "publicIpName": "[steps('testbox').publicIp.name]",
       "location": "[location()]"

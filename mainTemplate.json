@@ -62,6 +62,17 @@
         "description": "Storage account type"
       }
     },
+    "storageAccountNewOrExisting": {
+      "type": "string",
+      "defaultValue": "new",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "metadata": {
+        "description": "Storage account new or existing"
+      }
+    },
     "namePrefix": {
       "type": "string",
       "defaultValue": "qdb-",
@@ -164,7 +175,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('baseUrl'), '/storageAccount.json')]",
+          "uri": "[concat(parameters('baseUrl'), '/storageAccount.',parameters('storageAccountNewOrExisting'),'.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -380,7 +391,7 @@
       "type": "string",
       "value": "[concat(parameters('domainNameLabel'),'.',parameters('location'),'.cloudapp.azure.com')]",
       "metadata": {
-        "description": "SSH to this public address to access the jump box."
+        "description": "SSH to this public address to access the testbox."
       }
     }
   }

@@ -287,6 +287,7 @@
       "sshPublicKey": "[steps('credentials').adminCredentials.sshPublicKey]",
       "storageAccountName": "[steps('storage').storageAccount.name]",
       "storageAccountType": "[steps('storage').storageAccount.type]",
+      "storageAccountNewOrExisting": "[steps('storage').storageAccount.newOrExisting]",
       "nodeCount": "[steps('cluster').nodeCount]",
       "replication": "[steps('cluster').replication]",
       "nodeSize": "[steps('cluster').vmSize]",

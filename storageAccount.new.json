@@ -12,8 +12,7 @@
       "type": "string",
       "allowedValues": [
         "Standard_LRS",
-        "Standard_GRS",
-        "Premium_LRS"
+        "Standard_GRS"
       ]
     }
   },

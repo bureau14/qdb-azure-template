@@ -55,8 +55,7 @@
       "defaultValue": "Standard_LRS",
       "allowedValues": [
         "Standard_LRS",
-        "Standard_GRS",
-        "Premium_LRS"
+        "Standard_GRS"
       ],
       "metadata": {
         "description": "Storage account type"

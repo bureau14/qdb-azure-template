@@ -59,14 +59,13 @@
   "variables": {
     "vmImage": {
       "publisher": "quasardb",
-      "offer": "quasardb-xtp-node",
-      "sku": "20rc6",
+      "offer": "quasardb",
+      "sku": "node",
       "version": "latest"
     },
     "vmName": "[concat(parameters('computerName'),'-vm')]",
     "nicName": "[concat(parameters('computerName'),'-nic')]",
     "storageAccountContainerName": "vhd",
-    "region": "[parameters('location')]",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('networkName')), '/subnets/', parameters('subnetName'))]",
     "filesToDownload": [
       "[concat(parameters('baseUrl'), '/quasardbNode.setup.sh')]"
@@ -78,7 +77,7 @@
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
-      "location": "[variables('region')]",
+      "location": "[parameters('location')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -98,15 +97,15 @@
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmName')]",
-      "location": "[variables('region')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+      ],
       "plan": {
         "name": "[variables('vmImage').sku]",
         "publisher": "[variables('vmImage').publisher]",
         "product": "[variables('vmImage').offer]"
       },
-      "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
-      ],
       "properties": {
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySet'))]"
@@ -144,7 +143,7 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmName'), '/setup')]",
       "apiVersion": "2016-03-30",
-      "location": "[variables('region')]",
+      "location": "[parameters('location')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
       ],

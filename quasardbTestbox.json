@@ -54,20 +54,19 @@
     }
   },
   "variables": {
-    "filesToDownload": [
-      "[concat(parameters('baseUrl'), '/quasardbTestbox.setup.sh')]",
-      "[concat(parameters('baseUrl'), '/quasardbTestbox.motd.txt')]",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/web-bridge/qdb-web-bridge_2.0.0-1.deb",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/utils/qdb-utils_2.0.0-1.deb",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/api/c/qdb-api_2.0.0-1.deb",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/api/python/qdb_python_api-2.0.0rc6-py2.7-linux-x86_64.egg",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/api/php/quasardb-2.0.0.tgz",
-      "https://download.quasardb.net/quasardb/2.0/2.0.0rc6/bench/qdb-benchmark-2.0.0-Linux.tar.gz"
-    ],
-    "storageAccountContainerName": "vhd",
+    "vmImage": {
+      "publisher": "quasardb",
+      "offer": "quasardb",
+      "sku": "testbox",
+      "version": "latest"
+    },
     "vmName": "[concat(parameters('computerName'),'-vm')]",
     "nicName": "[concat(parameters('computerName'),'-nic')]",
+    "storageAccountContainerName": "vhd",
     "subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('networkName')),'/subnets/',parameters('subnetName'))]",
+    "filesToDownload": [
+      "[concat(parameters('baseUrl'), '/quasardbTestbox.setup.sh')]"
+    ],
     "commandToExecute": "[concat('bash quasardbTestbox.setup.sh --address=',parameters('ipAddress'),':',parameters('httpPort'),' --node=',parameters('peerAddress'),':',parameters('qdbPort'))]"
   },
   "resources": [
@@ -105,6 +104,11 @@
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
+      "plan": {
+        "name": "[variables('vmImage').sku]",
+        "publisher": "[variables('vmImage').publisher]",
+        "product": "[variables('vmImage').offer]"
+      },
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
@@ -116,12 +120,7 @@
           "linuxConfiguration": "[parameters('vmLinuxConfig')]"
         },
         "storageProfile": {
-          "imageReference": {
-            "publisher": "Canonical",
-            "offer": "UbuntuServer",
-            "sku": "14.04.3-LTS",
-            "version": "latest"
-          },
+          "imageReference": "[variables('vmImage')]",
           "osDisk": {
             "name": "osdisk",
             "vhd": {

@@ -146,8 +146,8 @@
             "osPlatform": "Linux",
             "imageReference": {
               "publisher": "quasardb",
-              "offer": "quasardb-xtp-node",
-              "sku": "20rc6"
+              "offer": "quasardb",
+              "sku": "node"
             },
             "count": "[steps('cluster').nodeCount]"
           }
@@ -232,9 +232,9 @@
             },
             "osPlatform": "Linux",
             "imageReference": {
-              "publisher": "Canonical",
-              "offer": "UbuntuServer",
-              "sku": "14.04.3-LTS"
+              "publisher": "quasardb",
+              "offer": "quasardb",
+              "sku": "testbox"
             },
             "count": 1
           }

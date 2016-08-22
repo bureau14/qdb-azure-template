@@ -1,6 +1,6 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#1",
-  "contentVersion": "1.0.0.0",
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.1.1.0",
   "parameters": {
     "location": {
       "type": "string"
@@ -20,11 +20,12 @@
     {
       "name": "[parameters('accountName')]",
       "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-01-01",
       "location": "[parameters('location')]",
-      "properties": {
-        "accountType": "[parameters('accountType')]"
-      }
+      "sku": {
+        "name": "[parameters('accountType')]"
+      },
+      "kind": "Storage"
     }
   ]
 }

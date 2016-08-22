@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
+  "contentVersion": "1.1.1.0",
   "parameters": {
     "baseUrl": {
       "type": "string",
@@ -150,12 +150,12 @@
     {
       "name": "availabilitySet",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
+      "apiVersion": "2016-07-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/availabilitySet.json')]",
-          "contentVersion": "1.0.0.0"
+          "contentVersion": "1.1.1.0"
         },
         "parameters": {
           "location": {
@@ -170,12 +170,12 @@
     {
       "name": "storageAccount",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
+      "apiVersion": "2016-07-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/storageAccount.',parameters('storageAccountNewOrExisting'),'.json')]",
-          "contentVersion": "1.0.0.0"
+          "contentVersion": "1.1.1.0"
         },
         "parameters": {
           "location": {
@@ -193,12 +193,12 @@
     {
       "name": "virtualNetwork",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
+      "apiVersion": "2016-07-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/virtualNetwork.json')]",
-          "contentVersion": "1.0.0.0"
+          "contentVersion": "1.1.1.0"
         },
         "parameters": {
           "location": {
@@ -216,7 +216,7 @@
     {
       "name": "[concat('quasardbNode', copyindex(1))]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
+      "apiVersion": "2016-07-01",
       "dependsOn": [
         "availabilitySet",
         "storageAccount",
@@ -230,7 +230,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/quasardbNode.json')]",
-          "contentVersion": "1.0.0.0"
+          "contentVersion": "1.1.1.0"
         },
         "parameters": {
           "location": {
@@ -284,12 +284,12 @@
     {
       "name": "networkSecurityGroup",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
+      "apiVersion": "2016-07-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/networkSecurityGroup.json')]",
-          "contentVersion": "1.0.0.0"
+          "contentVersion": "1.1.1.0"
         },
         "parameters": {
           "location": {
@@ -304,12 +304,12 @@
     {
       "name": "publicIpAddress",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
+      "apiVersion": "2016-07-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/publicIpAddress.json')]",
-          "contentVersion": "1.0.0.0"
+          "contentVersion": "1.1.1.0"
         },
         "parameters": {
           "location": {
@@ -327,7 +327,7 @@
     {
       "name": "quasardbTestbox",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
+      "apiVersion": "2016-07-01",
       "dependsOn": [
         "quasardbNode1",
         "publicIpAddress"
@@ -336,7 +336,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/quasardbTestbox.json')]",
-          "contentVersion": "1.0.0.0"
+          "contentVersion": "1.1.1.0"
         },
         "parameters": {
           "location": {

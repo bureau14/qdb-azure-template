@@ -329,7 +329,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-07-01",
       "dependsOn": [
-        "quasardbNode1",
+        "storageAccount",
+        "virtualNetwork",
         "publicIpAddress"
       ],
       "properties": {

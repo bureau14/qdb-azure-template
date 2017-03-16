@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.1.2.0",
+  "contentVersion": "1.1.3.0",
   "parameters": {
     "baseUrl": {
       "type": "string",
@@ -155,7 +155,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/availabilitySet.json')]",
-          "contentVersion": "1.1.2.0"
+          "contentVersion": "1.1.3.0"
         },
         "parameters": {
           "location": {
@@ -175,7 +175,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/storageAccount.',parameters('storageAccountNewOrExisting'),'.json')]",
-          "contentVersion": "1.1.2.0"
+          "contentVersion": "1.1.3.0"
         },
         "parameters": {
           "location": {
@@ -198,7 +198,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/virtualNetwork.json')]",
-          "contentVersion": "1.1.2.0"
+          "contentVersion": "1.1.3.0"
         },
         "parameters": {
           "location": {
@@ -230,7 +230,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/quasardbNode.json')]",
-          "contentVersion": "1.1.2.0"
+          "contentVersion": "1.1.3.0"
         },
         "parameters": {
           "location": {
@@ -289,7 +289,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/networkSecurityGroup.json')]",
-          "contentVersion": "1.1.2.0"
+          "contentVersion": "1.1.3.0"
         },
         "parameters": {
           "location": {
@@ -309,7 +309,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/publicIpAddress.json')]",
-          "contentVersion": "1.1.2.0"
+          "contentVersion": "1.1.3.0"
         },
         "parameters": {
           "location": {
@@ -337,7 +337,7 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(parameters('baseUrl'), '/quasardbTestbox.json')]",
-          "contentVersion": "1.1.2.0"
+          "contentVersion": "1.1.3.0"
         },
         "parameters": {
           "location": {
